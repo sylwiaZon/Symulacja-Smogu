@@ -9,10 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -20,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Menu extends Application {
     private TextField temperature, wind, precipitation;
     ComboBox pmType, duration, traffic;
     Simulation simulation;
@@ -28,7 +25,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception{
         simulation = new Simulation();
-        Scene scene = new Scene(getMenu(),500,600);
+        Scene scene = new Scene(getMenu(),500,400);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
@@ -37,6 +34,7 @@ public class Main extends Application {
     private GridPane getMenu(){
         GridPane gridPane = new GridPane();
         gridPane.add(new Text("Wind"),0, 0);
+        gridPane.add(new Text("Force of the wind and \n its direction, eg 12E"),2,0);
         gridPane.add(new Text("Temperature"),0, 1);
         gridPane.add(new Text("Precipitation"),0, 2);
         gridPane.add(new Text("PM type"),0, 3);
@@ -80,9 +78,58 @@ public class Main extends Application {
 
     private Button simulate(){
         Button apply = new Button("Simulate!");
+        apply.setOnAction(value -> {
+            processData();
+        });
         apply.setMinWidth(100);
         return apply;
     }
+
+    private void processData(){
+        simulation.wind = wind.getText();
+        simulation.duration = getDuration();
+        simulation.pmType = pmType.getValue().toString();
+        simulation.precipitation = Integer.parseInt(precipitation.getText());
+        simulation.temperature = Integer.parseInt(temperature.getText());
+        simulation.traffic = getTraffic();
+    }
+
+    private int getDuration(){
+         if(!duration.getValue().toString().isEmpty()) {
+            String dur = duration.getValue().toString();
+            switch (dur) {
+                case "1h":
+                    return 1;
+                case "2h":
+                    return 2;
+                case "6h":
+                    return 6;
+                case "12h":
+                    return 12;
+                case "24h":
+                    return 24;
+                case "48h":
+                    return 48;
+                }
+            }
+        return 0;
+    }
+
+    private AvaliableTraffic getTraffic(){
+        if(!traffic.getValue().toString().isEmpty()) {
+            String tr = traffic.getValue().toString();
+            switch (tr) {
+                case "low":
+                    return AvaliableTraffic.LOW;
+                case "medium":
+                    return AvaliableTraffic.MEDIUM;
+                case "high":
+                    return AvaliableTraffic.HIGH;
+            }
+        }
+        return AvaliableTraffic.LOW;
+    }
+
 
     public static void main(String[] args) {
         launch(args);
