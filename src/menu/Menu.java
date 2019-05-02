@@ -1,5 +1,10 @@
 package menu;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -25,13 +32,13 @@ public class Menu extends Application {
     @Override
     public void start(Stage stage) throws Exception{
         simulation = new Simulation();
-        Scene scene = new Scene(getMenu(),500,400);
+        Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
     }
 
-    private GridPane getMenu(){
+    private GridPane getMenu() throws FileNotFoundException{
         GridPane gridPane = new GridPane();
         gridPane.add(new Text("Wind"),0, 0);
         gridPane.add(new Text("Force of the wind and \n its direction, eg 12E"),2,0);
@@ -67,19 +74,39 @@ public class Menu extends Application {
         gridPane.add(duration,1, 5);
 
         gridPane.add(simulate(),2,6);
-
-        gridPane.setPadding(new Insets(50, 100, 50, 50));
+        gridPane.add(dragon(),2,8);
+        gridPane.setPadding(new Insets(50, 50, 50, 50));
         gridPane.setVgap(10);
         gridPane.setHgap(10);
         gridPane.setAlignment(Pos.BASELINE_CENTER);
 
         return gridPane;
     }
-
+    private ImageView dragon() throws FileNotFoundException{
+        
+        FileInputStream input = new FileInputStream("src/menu/images/dragon.gif");
+Image image = new Image(input);
+ImageView imageView = new ImageView(image);
+imageView.setFitHeight(200);
+imageView.setFitWidth(200);
+        return imageView;
+    }
     private Button simulate(){
         Button apply = new Button("Simulate!");
         apply.setOnAction(value -> {
-            processData();
+            try {
+                processData();
+                
+                Stage stage2 = (Stage) apply.getScene().getWindow();
+                stage2.setTitle("Smog Simulation");
+                SimulationWindow window = new SimulationWindow();
+                window.setSimulation(simulation);
+                Scene scene= new Scene(window.getWindow(),700,700); // zmienic
+                stage2.setScene(scene);
+                stage2.show();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         apply.setMinWidth(100);
         return apply;
