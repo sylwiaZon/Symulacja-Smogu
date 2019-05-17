@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,11 +32,21 @@ public class Menu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
+        ApiData a = new ApiData();
+        a.connect();
         simulation = new Simulation();
+        a.getData(simulation); //wpisanie danych do symulacji
+        
         Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
+        setData();
+    }
+private void setData(){
+        wind.setText(simulation.wind);
+        temperature.setText(""+simulation.getTemperature());
+        precipitation.setText(""+simulation.getPrecipitation());
     }
 
     private GridPane getMenu() throws FileNotFoundException{
@@ -53,16 +64,23 @@ public class Menu extends Application {
         ObservableList<String> pm = FXCollections.observableArrayList (
                 "PM10", "PM2");
         pmType = new ComboBox(pm);
+        pmType.setValue("PM10");
         pmType.setMinWidth(150);
+        pmType.setOnAction(value ->{
+            simulation.pmType=pmType.getValue().toString();
+            setData();
+        });
 
         ObservableList<String> tr = FXCollections.observableArrayList (
                 "low", "medium", "high");
         traffic = new ComboBox(tr);
+        traffic.setValue("medium");
         traffic.setMinWidth(150);
 
         ObservableList<String> dr = FXCollections.observableArrayList (
                 "1h", "2h", "6h", "12h", "24h", "48h");
         duration = new ComboBox(dr);
+        duration.setValue("12h");
         duration.setMinWidth(150);
 
         precipitation = new TextField();
@@ -120,7 +138,7 @@ imageView.setFitWidth(200);
         simulation.temperature = Integer.parseInt(temperature.getText());
         simulation.traffic = getTraffic();
     }
-
+    
     private int getDuration(){
          if(!duration.getValue().toString().isEmpty()) {
             String dur = duration.getValue().toString();
@@ -156,8 +174,6 @@ imageView.setFitWidth(200);
         }
         return AvaliableTraffic.LOW;
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }

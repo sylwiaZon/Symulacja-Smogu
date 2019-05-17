@@ -7,7 +7,9 @@ enum AvaliableTraffic {
 
 public class Simulation {
     int temperature;
-    String wind;
+    String wind; //w m/s 
+    int precipitation25;
+    int precipitation10;
     int precipitation;
     String pmType;
     int duration;
@@ -20,6 +22,12 @@ public class Simulation {
         return wind;
     }
     int getPrecipitation(){
+        if(this.pmType =="PM10"){
+            precipitation = precipitation10;
+        }
+        if(this.pmType =="PM2"){
+            precipitation = precipitation25;
+        }        
         return precipitation;
     }
     String getPmType(){
