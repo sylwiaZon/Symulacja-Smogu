@@ -114,7 +114,6 @@ imageView.setFitWidth(200);
         apply.setOnAction(value -> {
             try {
                 processData();
-                
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();
