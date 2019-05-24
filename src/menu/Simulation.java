@@ -13,6 +13,7 @@ public class Simulation {
     int precipitation;
     String pmType;
     int duration;
+    boolean raining; //true - pada, false - nie 
     AvaliableTraffic traffic;
     
     int getTemperature(){
