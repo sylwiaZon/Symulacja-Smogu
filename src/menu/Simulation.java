@@ -28,7 +28,7 @@ public class Simulation {
 //    public Simulation(int givenTemperature, String givenWind, String givenPmType, double [] givenPm10,
 //                      double [] givenPm25, boolean isRaining ,AvaliableTraffic givenTraffic, int givenDuration){
 //          if(matrixSize <= givenPm10 || matrixSize <= givenPm25 ){
-//            throw new IllegalArgumentException("Size of matrix must be smaller than length of PM10/25 array: " + hour);
+//            throw new IllegalArgumentException("Size of matrix must be smaller than length of PM10/25 array");
 //    }
 //        temperature = givenTemperature;
 //        wind = givenWind;
@@ -276,4 +276,5 @@ public class Simulation {
     }
 
 }
+
 
