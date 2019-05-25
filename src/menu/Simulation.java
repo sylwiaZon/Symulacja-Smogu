@@ -19,7 +19,7 @@ public class Simulation {
     int[] sensorsCoordinatesX={1,2,3,4,5};
     int[] sensorsCoordinatesY ={1,2,3,4,5};
     double[] tempPM10 = {1,2,3,4,5};
-    private int size = 70;
+    public int size = 596;
     
     int getTemperature(){
         return temperature;

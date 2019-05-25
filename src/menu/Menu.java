@@ -1,6 +1,5 @@
 package menu;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -8,22 +7,16 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import pictures.Picture;
 
 public class Menu extends Application {
     private TextField temperature, wind, precipitation;
@@ -102,11 +95,11 @@ private void setData(){
     }
     private ImageView dragon() throws FileNotFoundException{
         
-        FileInputStream input = new FileInputStream("src/menu/images/dragon.gif");
-Image image = new Image(input);
-ImageView imageView = new ImageView(image);
-imageView.setFitHeight(200);
-imageView.setFitWidth(200);
+        FileInputStream input = new FileInputStream("src/images/dragon.gif");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
         return imageView;
     }
     private Button simulate(){
@@ -174,6 +167,14 @@ imageView.setFitWidth(200);
         return AvaliableTraffic.LOW;
     }
     public static void main(String[] args) {
+        Simulation sim = new Simulation();
+        double weights[] = new double[70];
+        for(int i = 0; i<70;i++){
+            weights[i] = i+1;
+        }
+        double[][] dataMatrix = sim.kriging(weights);
+        Picture picture = new Picture(dataMatrix, sim.size, "PM10");
+        picture.createPicture();
         launch(args);
     }
 }
