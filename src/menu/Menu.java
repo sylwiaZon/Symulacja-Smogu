@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,14 +29,26 @@ public class Menu extends Application {
     private TextField temperature, wind, precipitation;
     ComboBox pmType, duration, traffic;
     Simulation simulation;
-
+    CheckBox rain;
+    
+    ApiData a = new ApiData();
     @Override
     public void start(Stage stage) throws Exception{
+       
+        a.connect();
         simulation = new Simulation();
+        a.getData(simulation); //wpisanie danych do symulacji
+        
         Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
+        setData();
+    }
+private void setData(){
+        wind.setText(simulation.wind);
+        temperature.setText(""+simulation.getTemperature());
+        precipitation.setText(""+simulation.getPrecipitation());
     }
 
     private GridPane getMenu() throws FileNotFoundException{
@@ -47,22 +60,30 @@ public class Menu extends Application {
         gridPane.add(new Text("PM type"),0, 3);
         gridPane.add(new Text("Traffic"),0, 4);
         gridPane.add(new Text("Duration of simulation"),0, 5);
+        gridPane.add(new Text("Raining"),0,6);
         wind = new TextField ();
         temperature = new TextField ();
 
         ObservableList<String> pm = FXCollections.observableArrayList (
                 "PM10", "PM2");
         pmType = new ComboBox(pm);
+        pmType.setValue("PM10");
         pmType.setMinWidth(150);
+        pmType.setOnAction(value ->{
+            simulation.pmType=pmType.getValue().toString();
+            setData();
+        });
 
         ObservableList<String> tr = FXCollections.observableArrayList (
                 "low", "medium", "high");
         traffic = new ComboBox(tr);
+        traffic.setValue("medium");
         traffic.setMinWidth(150);
 
         ObservableList<String> dr = FXCollections.observableArrayList (
                 "1h", "2h", "6h", "12h", "24h", "48h");
         duration = new ComboBox(dr);
+        duration.setValue("12h");
         duration.setMinWidth(150);
 
         precipitation = new TextField();
@@ -72,7 +93,8 @@ public class Menu extends Application {
         gridPane.add(pmType,1, 3);
         gridPane.add(traffic,1, 4);
         gridPane.add(duration,1, 5);
-
+        rain = new CheckBox();
+        gridPane.add(rain,1,6);
         gridPane.add(simulate(),2,6);
         gridPane.add(dragon(),2,8);
         gridPane.setPadding(new Insets(50, 50, 50, 50));
@@ -97,6 +119,9 @@ imageView.setFitWidth(200);
             try {
                 processData();
                 
+                for(int i =0;i<3;i++){
+                    System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica xd
+                }
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();
@@ -119,8 +144,9 @@ imageView.setFitWidth(200);
         simulation.precipitation = Integer.parseInt(precipitation.getText());
         simulation.temperature = Integer.parseInt(temperature.getText());
         simulation.traffic = getTraffic();
+        simulation.raining=rain.isSelected();
     }
-
+    
     private int getDuration(){
          if(!duration.getValue().toString().isEmpty()) {
             String dur = duration.getValue().toString();
@@ -156,8 +182,6 @@ imageView.setFitWidth(200);
         }
         return AvaliableTraffic.LOW;
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }
