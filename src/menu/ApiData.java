@@ -115,9 +115,10 @@ public class ApiData {
         simulation.pmType="PM10";
     }
     
-    Integer[] getMeasurements(Simulation simulation){
+    Double[] getMeasurements(Simulation simulation){
         
-        Integer[] tab = new Integer[3];
+        Double[] tab = new Double[3];
+      
         Integer[] installationId = new Integer[3];
         installationId[0]=1096; // Karmelicka
         installationId[1]=189; // Studencka
@@ -154,7 +155,7 @@ public class ApiData {
            // System.out.println(name);
          
             if (name.equals("PM10")){
-                  tab[k]=obj.getInt("value");
+                  tab[k]=obj.getDouble("value");
                   break;
             } 
         }
@@ -195,7 +196,8 @@ public class ApiData {
            // System.out.println(name);
          
             if (name.equals("PM25")){
-                  tab[k]=obj.getInt("value");
+                  tab[k]=obj.getDouble("value");
+                  
                   break;
             } 
         }
@@ -205,6 +207,8 @@ public class ApiData {
                     Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
                 }
         }
+        
+        
         
         return tab;
     }
