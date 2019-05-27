@@ -1,44 +1,38 @@
 package menu;
-
 import java.lang.String;
 import smile.interpolation.KrigingInterpolation;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Vector;
+import java.util.stream.Stream;
 
 enum AvaliableTraffic {
     LOW, HIGH, MEDIUM
 }
 
-public class Simulation {
+public class Simulation{
     int temperature;
-    String wind = "2N"; //w m/s
+    String wind ; //w m/s
     String windDirection;
-    double[] precipitation25;
-    double[] precipitation10 = {20, 30};
-    double[] precipitation;
-    String pmType = "PM10";
-    int duration = 3;
+    double precipitation25;
+    double precipitation10;
+    double precipitation;
+    double [] precipitationFromSensors= new double[3] ;
+    String pmType ;
+    int duration ;
     boolean raining;
     AvaliableTraffic traffic;
-    double[][] sensorsCoordinates = {{1, 1}, {3, 4}}; //{{row,col}}
-    double[] tempPM10 = {5, 10};
-    int matrixSize = 5;
+    double[][] sensorsCoordinates = { {100, 100},{100,200},{400,400}}; //{{row,col}} // sensorscoordinates[2][] - aleje
+    int matrixSize = 596;
+    int cuurentHour;
+    ApiData data;
 
 
-//    public Simulation(int givenTemperature, String givenWind, String givenPmType, double [] givenPm10,
-//                      double [] givenPm25, boolean isRaining ,AvaliableTraffic givenTraffic, int givenDuration){
-//          if(matrixSize <= givenPm10 || matrixSize <= givenPm25 ){
-//            throw new IllegalArgumentException("Size of matrix must be smaller than length of PM10/25 array");
-//    }
-//        temperature = givenTemperature;
-//        wind = givenWind;
-//        pmType = givenPmType;
-//        precipitation10 = givenPm10;
-//        precipitation25 = givenPm25;
-//        raining = isRaining;
-//        traffic = givenTraffic;
-//        duration = givenDuration;
-//    }
+    public Simulation(ApiData data_){
+        data = data_;
+    }
 
     int getTemperature(){
         return temperature;
@@ -48,14 +42,14 @@ public class Simulation {
         return wind;
     }
 
-    double[] getPrecipitation() {
+    double getPrecipitation() {
         if (this.pmType.equals("PM10")) {
-            precipitation = precipitation10;
+            this.precipitation =this.precipitation10;
         }
         if (this.pmType.equals("PM25")) {
-            precipitation = precipitation25;
+            this.precipitation = this.precipitation25;
         }
-        return precipitation;
+        return this.precipitation;
     }
 
     String getPmType(){
@@ -70,211 +64,116 @@ public class Simulation {
         return traffic;
     }
 
-    double[][] getSensorsCoordinates() {
+    double[][] getSensorsCoordinates(){
         return sensorsCoordinates;
     }
 
-    public int getSize() {
+    public int getSize(){
         return matrixSize;
     }
 
-    private int distanceToPixels() {
-        int pixels;
-        String windSpeedString = wind.substring(0, wind.length() - 1);
-        windDirection = wind.substring(wind.length() - 1);
-        float windSpeed = Float.parseFloat(windSpeedString);
-        float realDistanceInOneHour = windSpeed * 3600;
-        float metersPerPixel;
-
-        if (windDirection.equals("N") || windDirection.equals("S")) {
-            float mapHeightInMeters = 10000;
-            metersPerPixel = mapHeightInMeters / matrixSize;
-            pixels = Math.round(realDistanceInOneHour / metersPerPixel);
-        } else {
-            float mapWidthInMeters = 5000;
-            metersPerPixel = mapWidthInMeters / matrixSize;
-            pixels = Math.round(realDistanceInOneHour / metersPerPixel);
+    boolean wasPrecipitationChangedByUser(){
+        if (this.pmType.equals("PM10") && this.precipitation10 == this.precipitation) {
+            return false;
         }
-        return pixels;
+        if (this.pmType.equals("PM25") && this.precipitation25 == this.precipitation) {
+            return false;
+        }
+        return true;
     }
 
+    void initializePrecipitation(){
+        boolean changed = this.wasPrecipitationChangedByUser();
+        if(changed){
+            this.precipitationFromSensors[0]=this.precipitation - 5;
+            this.precipitationFromSensors[1]=this.precipitation + 5;
+            this.precipitationFromSensors[2]=this.precipitation + 5;
 
-    double[][] multiply(double[][] matrix, double value) {
-        for (int rows = 0; rows < matrix.length; rows++) {
-            for (int cols = 0; cols < matrix[0].length; cols++) {
-                matrix[rows][cols] *= value;
-            }
         }
-        return matrix;
+        else precipitationFromSensors = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
+        
+        if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=5;
+        else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=10;
+
+        if (this.pmType.equals("PM10")) this.precipitation10 =this.precipitation;
+        if (this.pmType.equals("PM25")) this.precipitation25 = this.precipitation;
     }
 
-    boolean[][] getFlagArray() {
-        boolean[][] wasMoved = new boolean[matrixSize][matrixSize];
-        for (int rows = 0; rows < wasMoved.length; rows++) {
-            for (int cols = 0; cols < wasMoved.length; cols++) {
-                wasMoved[rows][cols] = false;
-            }
-        }
-        return wasMoved;
-    }
-
-    double[][] moveCols(double[][] dataMatrix, int shift, boolean moveLeft) {
-        double[][] movedColsMatrix = dataMatrix;
-        boolean[][] wasMoved = this.getFlagArray();
-        if (moveLeft) {
-            for (int rows = dataMatrix.length - 1; rows >= 0; rows--) {
-                for (int cols = dataMatrix.length - 1; cols >= 0; cols--) {
-                    if (cols - shift >= 0) {
-                        if (!wasMoved[rows][cols - shift]) {
-                            movedColsMatrix[rows][cols] = movedColsMatrix[rows][cols - shift];
-                            wasMoved[rows][cols] = true;
-                        }
-                    }
-                    if (!wasMoved[rows][cols]) movedColsMatrix[rows][cols] = 0.0;
-                }
-            }
-        } else {
-            for (int rows = 0; rows < matrixSize; rows++) {
-                for (int cols = 0; cols < matrixSize; cols++) {
-                    if (cols + shift < matrixSize) {
-                        if (!wasMoved[rows][cols + shift]) {
-                            movedColsMatrix[rows][cols] = movedColsMatrix[rows][cols + shift];
-                            wasMoved[rows][cols] = true;
-                        }
-                    }
-                    if (!wasMoved[rows][cols]) movedColsMatrix[rows][cols] = 0.0;
-                }
-            }
-        }
-        return movedColsMatrix;
-    }
-
-    double[][] moveRows(double[][] dataMatrix, int shift, boolean moveUp) {
-        double[][] movedColsMatrix = dataMatrix;
-        boolean[][] wasMoved = this.getFlagArray();
-        if (moveUp) {
-            for (int rows = 0; rows < matrixSize; rows++) {
-                for (int cols = 0; cols < matrixSize; cols++) {
-                    if (rows + shift < matrixSize) {
-                        if (!wasMoved[rows + shift][cols]) {
-                            movedColsMatrix[rows][cols] = movedColsMatrix[rows + shift][cols];
-                            wasMoved[rows][cols] = true;
-                        }
-                    }
-                    if (!wasMoved[rows][cols]) movedColsMatrix[rows][cols] = 0.0;
-                }
-            }
-        } else {
-            for (int rows = dataMatrix.length - 1; rows >= 0; rows--) {
-                for (int cols = dataMatrix.length - 1; cols >= 0; cols--) {
-                    if (rows - shift >= 0) {
-                        if (!wasMoved[rows - shift][cols]) {
-                            movedColsMatrix[rows][cols] = movedColsMatrix[rows - shift][cols];
-                            wasMoved[rows][cols] = true;
-                        }
-                    }
-                    if (!wasMoved[rows][cols]) movedColsMatrix[rows][cols] = 0.0;
-                }
-            }
-        }
-        return movedColsMatrix;
-    }
-
-    Object[] convertMatrixDataForKrigingFunction(double[][] dataMatrix) {
-        int size = 0;
-        int index = 0;
-
-        for (int rows = 0; rows < dataMatrix.length; rows++) {
-            for (int cols = 0; cols < dataMatrix[0].length; cols++) {
-                if (dataMatrix[rows][cols] != 0.0) {
-                    size++;
-                }
-            }
-        }
-        double[][] coordinates = new double[size][2];
-        double[] weights = new double[size];
-
-        for (int rows = 0; rows < matrixSize; rows++) {
-            for (int cols = 0; cols < matrixSize; cols++) {
-                if (dataMatrix[rows][cols] != 0.0) {
-                    coordinates[index][0] = rows;
-                    coordinates[index][1] = cols;
-                    weights[index] = dataMatrix[rows][cols];
-                    index++;
-                }
-            }
-        }
-        return new Object[]{weights, coordinates};
-    }
-
-
-    double[][] kriging(double[] weights, double[][] sensorsCoordinates) {
+    double[][] kriging(double[] weights,double[][] sensorsCoordinates) {
         double[][] interpolatedMatrix = new double[matrixSize][matrixSize];
 
-        for (int i = 0; i < sensorsCoordinates.length; i++) {
-            interpolatedMatrix[(int) sensorsCoordinates[i][0]][(int) sensorsCoordinates[i][1]] = weights[i];
+        for(int i = 0; i< sensorsCoordinates.length; i++){
+            interpolatedMatrix[(int)sensorsCoordinates[i][0]][(int)sensorsCoordinates[i][1]] = weights[i];
         }
 
         KrigingInterpolation kriging = new KrigingInterpolation(sensorsCoordinates, weights);
         for (int i = 0; i < matrixSize; i++) {
             for (int j = 0; j < matrixSize; j++) {
-                if (interpolatedMatrix[i][j] == 0.0) {
-                    interpolatedMatrix[i][j] = kriging.interpolate(j, i);
+                if(interpolatedMatrix[i][j] == 0.0){
+                    interpolatedMatrix[i][j]= kriging.interpolate(j, i);
                 }
             }
         }
         return interpolatedMatrix;
     }
 
-    private double[][] propagate(double[][] dataMatrix) {
+    private double[][] propagate(){
         double mulCoefficient = 1;
-        double[][] propagatedDataMatrix = new double[matrixSize][matrixSize];
-        int numberOfPixelsToMoveBy = this.distanceToPixels();
-        Object[] convertedData;
-        switch (windDirection) {
-            case ("N"):
-                propagatedDataMatrix = this.moveRows(dataMatrix, numberOfPixelsToMoveBy, true);
-                convertedData = this.convertMatrixDataForKrigingFunction(propagatedDataMatrix);
-                propagatedDataMatrix = this.kriging((double[]) convertedData[0], (double[][]) convertedData[1]);
+        double alejeMulCoefficient = 1;
+        double[][] propagatedDataMatrix ;
 
-                break;
-            case ("S"):
-                propagatedDataMatrix = this.moveRows(dataMatrix, numberOfPixelsToMoveBy, false);
-                convertedData = this.convertMatrixDataForKrigingFunction(propagatedDataMatrix);
-                propagatedDataMatrix = this.kriging((double[]) convertedData[0], (double[][]) convertedData[1]);
-                break;
-            case ("W"):
-                propagatedDataMatrix = this.moveCols(dataMatrix, numberOfPixelsToMoveBy, true);
-                convertedData = this.convertMatrixDataForKrigingFunction(propagatedDataMatrix);
-                propagatedDataMatrix = this.kriging((double[]) convertedData[0], (double[][]) convertedData[1]);
-
-                break;
-            case ("E"):
-                propagatedDataMatrix = this.moveCols(dataMatrix, numberOfPixelsToMoveBy, false);
-                convertedData = this.convertMatrixDataForKrigingFunction(propagatedDataMatrix);
-                propagatedDataMatrix = this.kriging((double[]) convertedData[0], (double[][]) convertedData[1]);
-                break;
-        }
-
-        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.1;
-        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.2;
+        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.2;
+        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.3;
         else if (this.temperature < -5) mulCoefficient *= 1.4;
 
-        if (raining) mulCoefficient *= 0.7;
-        propagatedDataMatrix = this.multiply(propagatedDataMatrix, mulCoefficient);
+        if (this.raining){
+            mulCoefficient *= 0.8;
+            alejeMulCoefficient *= 0.9;
+        }
+        if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.2;
+        else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.1;
+        else alejeMulCoefficient *= 0.95;
+
+        for(int i = 0; i < this.precipitationFromSensors.length - 1; i++) this.precipitationFromSensors[i] *= mulCoefficient;
+        this.precipitationFromSensors[2] *= alejeMulCoefficient;
+        propagatedDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
         return propagatedDataMatrix;
+    }
+
+    void setCurrentHour(){
+        Date date = new Date();
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        this.cuurentHour = calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    void increaseTime(){
+        if(this.cuurentHour == 23) this.cuurentHour = 0;
+        else this.cuurentHour++;
+    }
+
+    void changeTemperature(){
+        if(this.cuurentHour >= 7 && this.cuurentHour <= 18){
+            if(this.temperature <= 32) this.temperature ++;
+            else this.temperature --;
+        }
+        else{
+            if(this.temperature >= -15) this.temperature --;
+            else this.temperature ++;
+        }
     }
 
     public Vector<double[][]> getDataForSimulation() {
         Vector<double[][]> finalData = new Vector<>();
-        double[][] tempDataMatrix = this.kriging(precipitation, sensorsCoordinates);
+        this.setCurrentHour();
+        double[][] tempDataMatrix = this.kriging(precipitationFromSensors, sensorsCoordinates);
         finalData.add(tempDataMatrix);
         for (int hourOfSimulation = 1; hourOfSimulation < duration; hourOfSimulation++) {
-            finalData.add(this.propagate(tempDataMatrix));
+            this.increaseTime();
+            this.changeTemperature();
+            tempDataMatrix = this.propagate();
+            finalData.add(tempDataMatrix);
         }
         return finalData;
     }
-
 }
-
-
