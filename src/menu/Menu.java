@@ -1,5 +1,6 @@
 package menu;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,21 +32,23 @@ public class Menu extends Application {
     private TextField temperature, wind, precipitation;
     ComboBox pmType, duration, traffic;
     Simulation simulation;
+    CheckBox rain;
 
+    ApiData a = new ApiData();
     @Override
     public void start(Stage stage) throws Exception{
-        ApiData a = new ApiData();
+
         a.connect();
-        simulation = new Simulation();
+        simulation = new Simulation(a);
         a.getData(simulation); //wpisanie danych do symulacji
-        
+
         Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
         setData();
     }
-private void setData(){
+    private void setData(){
         wind.setText(simulation.wind);
         temperature.setText(""+simulation.getTemperature());
         precipitation.setText(""+simulation.getPrecipitation());
@@ -58,6 +63,7 @@ private void setData(){
         gridPane.add(new Text("PM type"),0, 3);
         gridPane.add(new Text("Traffic"),0, 4);
         gridPane.add(new Text("Duration of simulation"),0, 5);
+        gridPane.add(new Text("Raining"),0,6);
         wind = new TextField ();
         temperature = new TextField ();
 
@@ -74,7 +80,7 @@ private void setData(){
         ObservableList<String> tr = FXCollections.observableArrayList (
                 "low", "medium", "high");
         traffic = new ComboBox(tr);
-        traffic.setValue("medium");
+        traffic.setValue("low");
         traffic.setMinWidth(150);
 
         ObservableList<String> dr = FXCollections.observableArrayList (
@@ -90,7 +96,8 @@ private void setData(){
         gridPane.add(pmType,1, 3);
         gridPane.add(traffic,1, 4);
         gridPane.add(duration,1, 5);
-
+        rain = new CheckBox();
+        gridPane.add(rain,1,6);
         gridPane.add(simulate(),2,6);
         gridPane.add(dragon(),2,8);
         gridPane.setPadding(new Insets(50, 50, 50, 50));
@@ -101,12 +108,12 @@ private void setData(){
         return gridPane;
     }
     private ImageView dragon() throws FileNotFoundException{
-        
+
         FileInputStream input = new FileInputStream("src/menu/images/dragon.gif");
-Image image = new Image(input);
-ImageView imageView = new ImageView(image);
-imageView.setFitHeight(200);
-imageView.setFitWidth(200);
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
         return imageView;
     }
     private Button simulate(){
@@ -114,6 +121,12 @@ imageView.setFitWidth(200);
         apply.setOnAction(value -> {
             try {
                 processData();
+                simulation.initializePrecipitation();
+//                System.out.println("Api");
+//                for(int i =0;i<3;i++){
+//                    System.out.println(a.getMeasurements(simulation)[i]);
+//                }
+//                System.out.println();
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();
@@ -133,13 +146,14 @@ imageView.setFitWidth(200);
         simulation.wind = wind.getText();
         simulation.duration = getDuration();
         simulation.pmType = pmType.getValue().toString();
-        simulation.precipitation = Integer.parseInt(precipitation.getText());
+        simulation.precipitation = Double.parseDouble(precipitation.getText());
         simulation.temperature = Integer.parseInt(temperature.getText());
         simulation.traffic = getTraffic();
+        simulation.raining=rain.isSelected();
     }
-    
+
     private int getDuration(){
-         if(!duration.getValue().toString().isEmpty()) {
+        if(!duration.getValue().toString().isEmpty()) {
             String dur = duration.getValue().toString();
             switch (dur) {
                 case "1h":
@@ -154,8 +168,8 @@ imageView.setFitWidth(200);
                     return 24;
                 case "48h":
                     return 48;
-                }
             }
+        }
         return 0;
     }
 
