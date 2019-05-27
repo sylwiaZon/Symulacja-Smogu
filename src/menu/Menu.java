@@ -2,6 +2,7 @@ package menu;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import pictures.Animation;
 import pictures.Picture;
 
 public class Menu extends Application {
@@ -172,9 +174,26 @@ private void setData(){
         for(int i = 0; i<70;i++){
             weights[i] = i+1;
         }
-        double[][] dataMatrix = sim.kriging(weights);
-        Picture picture = new Picture(dataMatrix, sim.size, "PM10");
-        picture.createPicture();
+        double[][] dataMatrix1 = sim.kriging(weights);
+        for(int i = 0; i<70;i++){
+            weights[i] = i+2;
+        }
+        double[][] dataMatrix2 = sim.kriging(weights);
+        for(int i = 0; i<70;i++){
+            weights[i] = i+3;
+        }
+        double[][] dataMatrix3 = sim.kriging(weights);
+        for(int i = 0; i<70;i++){
+            weights[i] = i+4;
+        }
+        double[][] dataMatrix4 = sim.kriging(weights);
+        Vector vector = new Vector();
+        vector.add(dataMatrix1);
+        vector.add(dataMatrix2);
+        vector.add(dataMatrix3);
+        vector.add(dataMatrix4);
+        Animation animation = new Animation();
+        animation.animate(vector,"PM10");
         launch(args);
     }
 }

@@ -29,11 +29,10 @@ public class Picture {
             values = pair;
         }
     }
-    public Picture (double [][]_matrix, int _size, String choice){
+    public Picture (double [][]_matrix, String choice){
         matrix = _matrix;
-        size = _size;
+        size = matrix.length;
         precipitation = choice;
-
         if(choice == "PM10"){
             mapColors = fillMap10();
         } else {
@@ -74,23 +73,13 @@ public class Picture {
     }
 
     public void createSmogImage() throws IOException {
-        BufferedImage fgImage = ImageIO.read( new File( "src/images/sym.jpg" ) );
+        BufferedImage fgImage = ImageIO.read( new File( "src/images/map.jpg" ) );
         int width = fgImage.getWidth();
         int height = fgImage.getHeight();
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB );
         int r,g,b,col;
         Color color;
-        //Do usunięcia jak bd ok mapa
-        color = Color.CYAN;
-        r = color.getRed();
-        g = color.getGreen();
-        b = color.getBlue();
-        col = (r << 16) | (g << 8) | b;
-        for(int i = 0; i <width;i++){
-            for(int j = 0;j<height;j++){
-                img.setRGB(i,j, col);
-            }
-        }
+
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
                 color = getColor(matrix[x][y]);
@@ -105,12 +94,12 @@ public class Picture {
 
     }
 
-    public void createPicture (){
+    public void createPicture (File file){
         try {
             createSmogImage();
-            OutputStream outStream = new FileOutputStream( "src/images/jpg.jpg" );
+            OutputStream outStream = new FileOutputStream( file );
 
-            BufferedImage fgImage = ImageIO.read( new File( "src/images/sym.jpg" ) );
+            BufferedImage fgImage = ImageIO.read( new File( "src/images/map.jpg" ) );
             BufferedImage bgImage = ImageIO.read( new File( "src/images/colors.jpg" ) );
 
             BufferedImage tmpImage = new BufferedImage( fgImage.getWidth(), fgImage.getHeight(), BufferedImage.TYPE_INT_ARGB );

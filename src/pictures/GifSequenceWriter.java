@@ -3,8 +3,11 @@ import javax.imageio.*;
 import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class GifSequenceWriter {
@@ -13,14 +16,16 @@ public class GifSequenceWriter {
     protected ImageWriteParam params;
     protected IIOMetadata metadata;
 
-    public GifSequenceWriter(ImageOutputStream out, int imageType, int delay, boolean loop) throws IOException {
+    public GifSequenceWriter() throws IOException {
+        ImageOutputStream out = new FileImageOutputStream(new File("src/images/sym.gif"));
         writer = ImageIO.getImageWritersBySuffix("gif").next();
         params = writer.getDefaultWriteParam();
+        BufferedImage pic = ImageIO.read(new File("src/images/map.jpg"));
 
-        ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(imageType);
+        ImageTypeSpecifier imageTypeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(pic.getType());
         metadata = writer.getDefaultImageMetadata(imageTypeSpecifier, params);
 
-        configureRootMetadata(delay, loop);
+        configureRootMetadata(1000, false);
 
         writer.setOutput(out);
         writer.prepareWriteSequence(null);
@@ -37,8 +42,6 @@ public class GifSequenceWriter {
         graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(delay / 10));
         graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
-        IIOMetadataNode commentsNode = getNode(root, "CommentExtensions");
-        commentsNode.setAttribute("CommentExtension", "Created by: https://memorynotfound.com");
 
         IIOMetadataNode appExtensionsNode = getNode(root, "ApplicationExtensions");
         IIOMetadataNode child = new IIOMetadataNode("ApplicationExtension");

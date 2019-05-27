@@ -58,7 +58,7 @@ public class SimulationWindow {
         return window;
     }
      private ImageView simulations() throws FileNotFoundException{ //tymczasowo dopoki nie dopiszemy kodu
-        FileInputStream input = new FileInputStream("src/images/sym.jpg");
+        FileInputStream input = new FileInputStream("src/images/sym.gif");
         //double[][] temp = simulation.kriging(simulation.tempPM10);
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
