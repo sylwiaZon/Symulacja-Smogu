@@ -33,11 +33,9 @@ public class Menu extends Application {
     ComboBox pmType, duration, traffic;
     Simulation simulation;
     CheckBox rain;
-
     ApiData a = new ApiData();
     @Override
     public void start(Stage stage) throws Exception{
-
         a.connect();
         simulation = new Simulation(a);
         a.getData(simulation); //wpisanie danych do symulacji
@@ -127,6 +125,7 @@ public class Menu extends Application {
 //                    System.out.println(a.getMeasurements(simulation)[i]);
 //                }
 //                System.out.println();
+
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();

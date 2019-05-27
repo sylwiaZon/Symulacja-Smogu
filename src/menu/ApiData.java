@@ -30,7 +30,7 @@ public class ApiData {
      void connect(){
          /* ----------------- Airly ---------------*/
           try {
-        String stringUrl = "https://airapi.airly.eu/v2/measurements/point?indexType=AIRLY_CAQI&lat=50.062006&lng=19.940984";
+        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId=8077";
           URL url = new URL(stringUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -113,6 +113,104 @@ public class ApiData {
         simulation.precipitation10=this.precipitationPM10;
         simulation.precipitation25 = this.precipitationPM25;
         simulation.pmType="PM10";
+    }
+    
+    Double[] getMeasurements(Simulation simulation){
+        
+        Double[] tab = new Double[3];
+      
+        Integer[] installationId = new Integer[3];
+        installationId[0]=1096; // Karmelicka
+        installationId[1]=189; // Studencka
+        installationId[2]=17; // na Alejach
+        if (simulation.getPmType()=="PM10"){
+            try {
+        for(int k =0;k<3;k++){
+        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
+          URL url = new URL(stringUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Accept", "application/json");
+        String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
+        connection.setRequestProperty("apikey", apiKey);
+
+        StringBuilder response = new StringBuilder();
+
+                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            response.append(line);
+                        }           }
+
+      // System.out.println(response.toString());
+        JSONObject jsonObj = new JSONObject(response.toString());
+
+        //System.out.println(jsonObj.getJSONObject("current").get("values"));
+        for(int i=0;i<6;i++){
+             JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
+             JSONObject obj =values.getJSONObject(i);
+             String name = (String) obj.get("name");
+           
+           // System.out.println(name);
+         
+            if (name.equals("PM10")){
+                  tab[k]=obj.getDouble("value");
+                  break;
+            } 
+        }
+            connection.disconnect();
+        }
+          } catch (IOException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }else{
+          try {
+        for(int k =0;k<3;k++){
+        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
+          URL url = new URL(stringUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Accept", "application/json");
+        String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
+        connection.setRequestProperty("apikey", apiKey);
+
+        StringBuilder response = new StringBuilder();
+
+                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            response.append(line);
+                        }           }
+
+      // System.out.println(response.toString());
+        JSONObject jsonObj = new JSONObject(response.toString());
+
+        //System.out.println(jsonObj.getJSONObject("current").get("values"));
+        for(int i=0;i<6;i++){
+             JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
+             JSONObject obj =values.getJSONObject(i);
+             String name = (String) obj.get("name");
+           
+           // System.out.println(name);
+         
+            if (name.equals("PM25")){
+                  tab[k]=obj.getDouble("value");
+                  
+                  break;
+            } 
+        }
+            connection.disconnect();
+        }
+          } catch (IOException ex) {
+                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
+        
+        
+        
+        return tab;
     }
     
 }
