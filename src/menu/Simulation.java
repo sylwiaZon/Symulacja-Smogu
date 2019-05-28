@@ -96,19 +96,14 @@ public class Simulation{
         if(changed){
             this.precipitationFromSensors[0]=this.precipitation;
             this.precipitationFromSensors[1]=this.precipitation - 5;
-            this.precipitationFromSensors[2]=this.precipitation - 5;
-            this.precipitationFromSensors[3]=this.precipitation + 5;
-            this.precipitationFromSensors[4]=this.precipitation + 5;
-
-
+            this.precipitationFromSensors[2]=this.precipitation + 5;
+        
         }
         else precipitationFromSensors = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
         
         if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=5;
         else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=10;
 
-        if (this.pmType.equals("PM10")) this.precipitation10 =this.precipitation;
-        if (this.pmType.equals("PM25")) this.precipitation25 = this.precipitation;
     }
 
     double[][] kriging(double[] weights,double[][] sensorsCoordinates) {
@@ -142,7 +137,7 @@ public class Simulation{
             mulCoefficient *= 0.8;
             alejeMulCoefficient *= 0.9;
         }
-        if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.2;
+        if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.1;
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
         else alejeMulCoefficient *= 0.95;
 
