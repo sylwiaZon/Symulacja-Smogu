@@ -62,7 +62,8 @@ public class SimulationWindow {
         return window;
     }
      private ImageView simulations() throws FileNotFoundException{ //tymczasowo dopoki nie dopiszemy kodu
-        FileInputStream input = new FileInputStream("src/menu/sym.jpg");
+        FileInputStream input = new FileInputStream("src/images/sym.gif");
+        //double[][] temp = simulation.kriging(simulation.tempPM10);
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(400);
@@ -71,7 +72,7 @@ public class SimulationWindow {
     }
     
     private ImageView home() throws FileNotFoundException{
-        FileInputStream input = new FileInputStream("src/menu/images/home.png");
+        FileInputStream input = new FileInputStream("src/images/home.png");
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(40);
@@ -90,8 +91,8 @@ public class SimulationWindow {
         return imageView;
     }
     private ImageView play() throws FileNotFoundException{
-        FileInputStream play = new FileInputStream("src/menu/images/play.png");
-        FileInputStream stop = new FileInputStream("src/menu/images/stop.png");
+        FileInputStream play = new FileInputStream("src/images/play.png");
+        FileInputStream stop = new FileInputStream("src/images/stop.png");
         Image image1 = new Image(play);
         Image image2 = new Image(stop);
         ImageView imageView = new ImageView(image1);
@@ -105,7 +106,7 @@ public class SimulationWindow {
     }
      private ImageView dragon() throws FileNotFoundException{
         
-        FileInputStream input = new FileInputStream("src/menu/images/dragon.gif");
+        FileInputStream input = new FileInputStream("src/images/dragon.gif");
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(200);

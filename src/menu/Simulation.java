@@ -24,6 +24,7 @@ public class Simulation{
     int duration ;
     boolean raining;
     AvaliableTraffic traffic;
+
     double[][] sensorsCoordinates = { {100, 100},{100,200},{400,400}}; //{{row,col}} // sensorscoordinates[2][] - aleje
     int matrixSize = 596;
     int cuurentHour;

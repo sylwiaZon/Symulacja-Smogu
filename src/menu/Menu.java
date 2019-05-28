@@ -4,29 +4,25 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import pictures.Animation;
+import pictures.Picture;
 
 public class Menu extends Application {
     private TextField temperature, wind, precipitation;
@@ -107,7 +103,8 @@ public class Menu extends Application {
     }
     private ImageView dragon() throws FileNotFoundException{
 
-        FileInputStream input = new FileInputStream("src/menu/images/dragon.gif");
+        FileInputStream input = new FileInputStream("src/images/dragon.gif");
+
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(200);
@@ -119,6 +116,11 @@ public class Menu extends Application {
         apply.setOnAction(value -> {
             try {
                 processData();
+
+
+                for(int i =0;i<3;i++){
+                    System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
+                }
                 simulation.initializePrecipitation();
 //                System.out.println("Api");
 //                for(int i =0;i<3;i++){
@@ -186,7 +188,9 @@ public class Menu extends Application {
         }
         return AvaliableTraffic.LOW;
     }
+
     public static void main(String[] args) {
+        
         launch(args);
     }
 }
