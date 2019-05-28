@@ -15,6 +15,7 @@ public class Simulation {
     int precipitation;
     String pmType;
     int duration;
+    boolean raining; //true - pada, false - nie 
     AvaliableTraffic traffic;
     int[] sensorsCoordinatesX={1,2,3,4,5};
     int[] sensorsCoordinatesY ={1,2,3,4,5};

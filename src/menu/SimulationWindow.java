@@ -37,6 +37,9 @@ public class SimulationWindow {
         pane.add(new Text("PM type: "+simulation.getPmType()),0, 3);
         pane.add(new Text("Traffic: "+simulation.getTraffic()),0, 4);
         pane.add(new Text("Duration of simulation: "+simulation.getDuration()+"h"),0, 5);
+        if(simulation.raining== true)
+            pane.add(new Text("Raining: yes"),0,6);
+        else pane.add(new Text("Raining: no"),0,6);
        // pane.setPadding(new Insets(50, 50, 50, 50));
         pane.setVgap(10);
         pane.setHgap(10);
