@@ -24,10 +24,11 @@ public class Simulation{
     int duration ;
     boolean raining;
     AvaliableTraffic traffic;
-
-    double[][] sensorsCoordinates = { {100, 100},{100,200},{400,400}}; //{{row,col}} // sensorscoordinates[2][] - aleje
+    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
+   // [5][] - N  [6][] - S [7][] - W [8][] - E
     int matrixSize = 596;
     int cuurentHour;
+    Vector<double[][]> finalDataforSimulation;
     ApiData data;
 
 
@@ -64,6 +65,9 @@ public class Simulation{
     int getDuration(){
         return duration;
     }
+    Vector<double[][]> getFinalDataforSimulation(){
+        return finalDataforSimulation;
+    }
 
     AvaliableTraffic getTraffic(){
         return traffic;
@@ -90,9 +94,12 @@ public class Simulation{
     void initializePrecipitation(){
         boolean changed = this.wasPrecipitationChangedByUser();
         if(changed){
-            this.precipitationFromSensors[0]=this.precipitation - 5;
-            this.precipitationFromSensors[1]=this.precipitation + 5;
-            this.precipitationFromSensors[2]=this.precipitation + 5;
+            this.precipitationFromSensors[0]=this.precipitation;
+            this.precipitationFromSensors[1]=this.precipitation - 5;
+            this.precipitationFromSensors[2]=this.precipitation - 5;
+            this.precipitationFromSensors[3]=this.precipitation + 5;
+            this.precipitationFromSensors[4]=this.precipitation + 5;
+
 
         }
         else precipitationFromSensors = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
@@ -136,7 +143,7 @@ public class Simulation{
             alejeMulCoefficient *= 0.9;
         }
         if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.2;
-        else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.1;
+        else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
         else alejeMulCoefficient *= 0.95;
 
         for(int i = 0; i < this.precipitationFromSensors.length - 1; i++) this.precipitationFromSensors[i] *= mulCoefficient;
@@ -168,7 +175,7 @@ public class Simulation{
         }
     }
 
-    public Vector<double[][]> getDataForSimulation() {
+    void initializeSimulation() {
         Vector<double[][]> finalData = new Vector<>();
         this.setCurrentHour();
         double[][] tempDataMatrix = this.kriging(precipitationFromSensors, sensorsCoordinates);
@@ -179,6 +186,6 @@ public class Simulation{
             tempDataMatrix = this.propagate();
             finalData.add(tempDataMatrix);
         }
-        return finalData;
+        this.finalDataforSimulation = finalData;
     }
 }
