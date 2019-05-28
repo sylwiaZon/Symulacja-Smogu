@@ -21,90 +21,90 @@ import org.json.JSONObject;
  * @author pyszczekk
  */
 public class ApiData {
-    
+
     int temperature;
     String wind;
-    int precipitationPM25;
-    int precipitationPM10;
-   
-     void connect(){
-         /* ----------------- Airly ---------------*/
-          try {
-        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId=8077";
-          URL url = new URL(stringUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    double precipitationPM25;
+    double precipitationPM10;
 
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
-        String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
-        connection.setRequestProperty("apikey", apiKey);
+    void connect(){
+        /* ----------------- Airly ---------------*/
+        try {
+            String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId=8077";
+            URL url = new URL(stringUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        StringBuilder response = new StringBuilder();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+            String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
+            connection.setRequestProperty("apikey", apiKey);
 
-                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            response.append(line);
-                        }           }
+            StringBuilder response = new StringBuilder();
 
-      // System.out.println(response.toString());
-        JSONObject jsonObj = new JSONObject(response.toString());
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    response.append(line);
+                }           }
 
-        //System.out.println(jsonObj.getJSONObject("current").get("values"));
-        for(int i=0;i<6;i++){
-             JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
-             JSONObject obj =values.getJSONObject(i);
-             String name = (String) obj.get("name");
-           
-           // System.out.println(name);
-            if (name.equals("PM25")){
-                 precipitationPM25=obj.getInt("value");
+            // System.out.println(response.toString());
+            JSONObject jsonObj = new JSONObject(response.toString());
+
+            //System.out.println(jsonObj.getJSONObject("current").get("values"));
+            for(int i=0;i<6;i++){
+                JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
+                JSONObject obj =values.getJSONObject(i);
+                String name = (String) obj.get("name");
+
+                // System.out.println(name);
+                if (name.equals("PM25")){
+                    precipitationPM25=obj.getInt("value");
                 }
-            if (name.equals("PM10")){
-                  precipitationPM10=obj.getInt("value");
+                if (name.equals("PM10")){
+                    precipitationPM10=obj.getInt("value");
                 }
-            if (name.equals("TEMPERATURE")){
-                temperature=obj.getInt("value");
+                if (name.equals("TEMPERATURE")){
+                    temperature=obj.getInt("value");
                 }
-            
-            
-            
+
+
+
+            }
+            connection.disconnect();
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        connection.disconnect();
-          } catch (IOException ex) {
-                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        
+
         /* ----------------- Weather Open Map ---------------*/
         try{
-        String stringUrl2 ="http://api.openweathermap.org/data/2.5/weather?q=Krakow,PL&APPID=8c53f908060ea53a90a656761306d06c";
-        URL url2 = new URL(stringUrl2);
-        HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
+            String stringUrl2 ="http://api.openweathermap.org/data/2.5/weather?q=Krakow,PL&APPID=8c53f908060ea53a90a656761306d06c";
+            URL url2 = new URL(stringUrl2);
+            HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
 
-        connection2.setRequestMethod("GET");
-        connection2.setRequestProperty("Accept", "application/json");
-     connection2.setRequestProperty("apikey", "8c53f908060ea53a90a656761306d06c");
-     StringBuilder response2 = new StringBuilder();
+            connection2.setRequestMethod("GET");
+            connection2.setRequestProperty("Accept", "application/json");
+            connection2.setRequestProperty("apikey", "8c53f908060ea53a90a656761306d06c");
+            StringBuilder response2 = new StringBuilder();
 
-                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection2.getInputStream()))) {
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            response2.append(line);
-                        }           }
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection2.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    response2.append(line);
+                }           }
 
-         //System.out.println(response2.toString());
-         JSONObject jsonObj2 = new JSONObject(response2.toString());
-        // System.out.println("wind: "+jsonObj2.getJSONObject("wind").get("speed")+"m/s, deg:"+jsonObj2.getJSONObject("wind").get("deg"));
-         int dir = (int) jsonObj2.getJSONObject("wind").get("deg");
-         if((dir<=56.25 && dir>=0)|| (dir>303.75 && dir<=360) )this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"N"; 
-         if((dir>56.25 && dir<=123.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"E";
-         if((dir>123.75 && dir<=236.25))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
-          if((dir>236.25 && dir<=303.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
-         connection2.disconnect();
+            //System.out.println(response2.toString());
+            JSONObject jsonObj2 = new JSONObject(response2.toString());
+            // System.out.println("wind: "+jsonObj2.getJSONObject("wind").get("speed")+"m/s, deg:"+jsonObj2.getJSONObject("wind").get("deg"));
+            int dir = (int) jsonObj2.getJSONObject("wind").get("deg");
+            if((dir<=56.25 && dir>=0)|| (dir>303.75 && dir<=360) )this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"N";
+            if((dir>56.25 && dir<=123.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"E";
+            if((dir>123.75 && dir<=236.25))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
+            if((dir>236.25 && dir<=303.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
+            connection2.disconnect();
         }catch (IOException ex) {
-                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                }
-     }
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     void getData(Simulation simulation){
         simulation.temperature = this.temperature;
         simulation.traffic = AvaliableTraffic.MEDIUM;
@@ -114,28 +114,28 @@ public class ApiData {
         simulation.precipitation25 = this.precipitationPM25;
         simulation.pmType="PM10";
     }
-    
+
     Double[] getMeasurements(Simulation simulation){
-        
+
         Double[] tab = new Double[3];
-      
+
         Integer[] installationId = new Integer[3];
         installationId[0]=1096; // Karmelicka
         installationId[1]=189; // Studencka
         installationId[2]=17; // na Alejach
         if (simulation.getPmType()=="PM10"){
             try {
-        for(int k =0;k<3;k++){
-        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
-          URL url = new URL(stringUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                for(int k =0;k<3;k++){
+                    String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
+                    URL url = new URL(stringUrl);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
-        String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
-        connection.setRequestProperty("apikey", apiKey);
+                    connection.setRequestMethod("GET");
+                    connection.setRequestProperty("Accept", "application/json");
+                    String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
+                    connection.setRequestProperty("apikey", apiKey);
 
-        StringBuilder response = new StringBuilder();
+                    StringBuilder response = new StringBuilder();
 
                     try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                         String line;
@@ -143,40 +143,40 @@ public class ApiData {
                             response.append(line);
                         }           }
 
-      // System.out.println(response.toString());
-        JSONObject jsonObj = new JSONObject(response.toString());
+                    // System.out.println(response.toString());
+                    JSONObject jsonObj = new JSONObject(response.toString());
 
-        //System.out.println(jsonObj.getJSONObject("current").get("values"));
-        for(int i=0;i<6;i++){
-             JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
-             JSONObject obj =values.getJSONObject(i);
-             String name = (String) obj.get("name");
-           
-           // System.out.println(name);
-         
-            if (name.equals("PM10")){
-                  tab[k]=obj.getDouble("value");
-                  break;
-            } 
-        }
-            connection.disconnect();
-        }
-          } catch (IOException ex) {
-                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                    //System.out.println(jsonObj.getJSONObject("current").get("values"));
+                    for(int i=0;i<6;i++){
+                        JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
+                        JSONObject obj =values.getJSONObject(i);
+                        String name = (String) obj.get("name");
+
+                        // System.out.println(name);
+
+                        if (name.equals("PM10")){
+                            tab[k]=obj.getDouble("value");
+                            break;
+                        }
+                    }
+                    connection.disconnect();
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else{
-          try {
-        for(int k =0;k<3;k++){
-        String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
-          URL url = new URL(stringUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            try {
+                for(int k =0;k<3;k++){
+                    String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId="+installationId[k];
+                    URL url = new URL(stringUrl);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
-        String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
-        connection.setRequestProperty("apikey", apiKey);
+                    connection.setRequestMethod("GET");
+                    connection.setRequestProperty("Accept", "application/json");
+                    String apiKey = "yXGd92NFP1fqqEJrVr93ZIuxInESv1eW";
+                    connection.setRequestProperty("apikey", apiKey);
 
-        StringBuilder response = new StringBuilder();
+                    StringBuilder response = new StringBuilder();
 
                     try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                         String line;
@@ -184,33 +184,33 @@ public class ApiData {
                             response.append(line);
                         }           }
 
-      // System.out.println(response.toString());
-        JSONObject jsonObj = new JSONObject(response.toString());
+                    // System.out.println(response.toString());
+                    JSONObject jsonObj = new JSONObject(response.toString());
 
-        //System.out.println(jsonObj.getJSONObject("current").get("values"));
-        for(int i=0;i<6;i++){
-             JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
-             JSONObject obj =values.getJSONObject(i);
-             String name = (String) obj.get("name");
-           
-           // System.out.println(name);
-         
-            if (name.equals("PM25")){
-                  tab[k]=obj.getDouble("value");
-                  
-                  break;
-            } 
-        }
-            connection.disconnect();
-        }
-          } catch (IOException ex) {
-                    Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+                    //System.out.println(jsonObj.getJSONObject("current").get("values"));
+                    for(int i=0;i<6;i++){
+                        JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
+                        JSONObject obj =values.getJSONObject(i);
+                        String name = (String) obj.get("name");
+
+                        // System.out.println(name);
+
+                        if (name.equals("PM25")){
+                            tab[k]=obj.getDouble("value");
+
+                            break;
+                        }
+                    }
+                    connection.disconnect();
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
-        
-        
+
+
+
         return tab;
     }
-    
+
 }

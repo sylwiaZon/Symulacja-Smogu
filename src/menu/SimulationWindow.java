@@ -7,6 +7,7 @@ package menu;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
@@ -62,7 +63,6 @@ public class SimulationWindow {
     }
      private ImageView simulations() throws FileNotFoundException{ //tymczasowo dopoki nie dopiszemy kodu
         FileInputStream input = new FileInputStream("src/menu/sym.jpg");
-        //double[][] temp = simulation.kriging(simulation.tempPM10);
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(400);

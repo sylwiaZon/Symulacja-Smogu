@@ -49,7 +49,7 @@ public class Menu extends Application {
     private void setData(){
         wind.setText(simulation.wind);
         temperature.setText(""+simulation.getTemperature());
-        precipitation.setText(""+simulation.getPrecipitation());
+        precipitation.setText(""+simulation.getPrecipitation2());
     }
 
     private GridPane getMenu() throws FileNotFoundException{

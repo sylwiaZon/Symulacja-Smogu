@@ -42,13 +42,17 @@ public class Simulation{
         return wind;
     }
 
-    double getPrecipitation() {
+    double getPrecipitation2() {
         if (this.pmType.equals("PM10")) {
             this.precipitation =this.precipitation10;
         }
-        if (this.pmType.equals("PM25")) {
+        if (this.pmType.equals("PM2")) {
             this.precipitation = this.precipitation25;
         }
+        return this.precipitation;
+    }
+
+    double getPrecipitation() {
         return this.precipitation;
     }
 
