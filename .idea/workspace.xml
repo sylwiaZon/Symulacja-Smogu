@@ -5,7 +5,17 @@
     <bookmark url="file://$PROJECT_DIR$/src/pictures/Picture.java" line="78" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="3dbeefef-bcd1-4808-8877-186598d669fe" name="Default Changelist" comment="Do gifa" />
+=======
+    <list default="true" id="3dbeefef-bcd1-4808-8877-186598d669fe" name="Default Changelist" comment="Do gifa">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu/ApiData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/ApiData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/Simulation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu/SimulationWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/SimulationWindow.java" afterDir="false" />
+    </list>
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +83,11 @@
         <entry file="file://$PROJECT_DIR$/src/menu/Menu.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="366">
+<<<<<<< HEAD
               <caret line="160" column="44" selection-start-line="160" selection-start-column="44" selection-end-line="160" selection-end-column="44" />
+=======
+              <caret line="192" column="8" selection-start-line="192" selection-start-column="8" selection-end-line="192" selection-end-column="8" />
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -227,7 +241,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+<<<<<<< HEAD
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559075235092" />
+=======
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559073953830" />
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
     <property name="last_opened_file_path" value="$PROJECT_DIR$/smile-math-1.5.1.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -347,7 +365,11 @@
       <workItem from="1558904203039" duration="470000" />
       <workItem from="1558944386481" duration="4807000" />
       <workItem from="1559051153449" duration="1496000" />
+<<<<<<< HEAD
       <workItem from="1559070572975" duration="1505000" />
+=======
+      <workItem from="1559070572975" duration="909000" />
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
     </task>
     <task id="LOCAL-00001" summary="Dragon">
       <created>1557700237024</created>
@@ -388,7 +410,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="59849000" />
+=======
+    <option name="totallyTimeSpent" value="59253000" />
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -514,6 +540,7 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+<<<<<<< HEAD
         </state>
       </provider>
     </entry>
@@ -547,6 +574,41 @@
         </state>
       </provider>
     </entry>
+=======
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/menu/ApiData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3400">
+          <caret line="213" column="5" selection-start-line="213" selection-start-column="5" selection-end-line="213" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pictures/Animation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pictures/GifSequenceWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
     <entry file="file://$PROJECT_DIR$/src/images/dragon.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -567,7 +629,11 @@
     <entry file="file://$PROJECT_DIR$/src/menu/Menu.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="366">
+<<<<<<< HEAD
           <caret line="160" column="44" selection-start-line="160" selection-start-column="44" selection-end-line="160" selection-end-column="44" />
+=======
+          <caret line="192" column="8" selection-start-line="192" selection-start-column="8" selection-end-line="192" selection-end-column="8" />
+>>>>>>> 8301b2eae11a80c26cd678660ee211268d91f4d2
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -7,6 +7,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="json-20180813" level="project" />
+    <orderEntry type="library" name="smile-interpolation-1.5.1" level="project" />
+    <orderEntry type="library" name="swing-worker-1.1" level="project" />
+    <orderEntry type="library" name="swingx-1.6.1" level="project" />
+    <orderEntry type="library" name="smile-math-1.5.1" level="project" />
+    <orderEntry type="library" name="slf4j-api-1.7.25" level="project" />
+    <orderEntry type="library" name="slf4j-simple-1.7.25" level="project" />
     <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
