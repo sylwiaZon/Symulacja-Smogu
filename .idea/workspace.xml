@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/menu/Simulation.java" line="78" mnemonic="7" />
+    <bookmark url="file://$PROJECT_DIR$/src/menu/Simulation.java" line="121" mnemonic="7" />
     <bookmark url="file://$PROJECT_DIR$/src/pictures/Picture.java" line="78" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3dbeefef-bcd1-4808-8877-186598d669fe" name="Default Changelist" comment="Do gifa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Symulejszyn/images/dragon.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Symulejszyn/images/dragon.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Symulejszyn/menu/ApiData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Symulejszyn/menu/ApiData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Symulejszyn/menu/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Symulejszyn/menu/Menu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Symulejszyn/menu/Simulation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Symulejszyn/menu/Simulation.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Symulejszyn/menu/SimulationWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Symulejszyn/menu/SimulationWindow.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu/ApiData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/ApiData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu/Simulation.java" afterDir="false" />
@@ -26,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pictures/Picture.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="75" column="71" selection-start-line="75" selection-start-column="71" selection-end-line="75" selection-end-column="71" />
+            <state relative-caret-position="1275">
+              <caret line="87" column="36" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -41,11 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/menu/SimulationWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="63" column="71" selection-start-line="63" selection-start-column="71" selection-end-line="63" selection-end-column="71" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="-433">
+              <caret line="66" selection-start-line="66" selection-end-line="66" />
             </state>
           </provider>
         </entry>
@@ -53,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/menu/Simulation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+            <state relative-caret-position="289">
+              <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -83,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/menu/Menu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="133" column="21" lean-forward="true" selection-start-line="133" selection-start-column="21" selection-end-line="133" selection-end-column="21" />
+            <state relative-caret-position="366">
+              <caret line="192" column="8" selection-start-line="192" selection-start-column="8" selection-end-line="192" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -173,11 +165,11 @@
         <option value="$PROJECT_DIR$/src/menu/ApiData.java" />
         <option value="$PROJECT_DIR$/src/menu/ScatterDataInterpolationDemo.java" />
         <option value="$PROJECT_DIR$/src/menu/Picture.java" />
-        <option value="$PROJECT_DIR$/src/menu/Simulation.java" />
         <option value="$PROJECT_DIR$/src/pictures/Animation.java" />
         <option value="$PROJECT_DIR$/src/pictures/Picture.java" />
-        <option value="$PROJECT_DIR$/src/menu/SimulationWindow.java" />
         <option value="$PROJECT_DIR$/src/pictures/GifSequenceWriter.java" />
+        <option value="$PROJECT_DIR$/src/menu/SimulationWindow.java" />
+        <option value="$PROJECT_DIR$/src/menu/Simulation.java" />
         <option value="$PROJECT_DIR$/src/menu/Menu.java" />
       </list>
     </option>
@@ -193,6 +185,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -234,14 +228,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559046233672" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559073953830" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/smile-math-1.5.1.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -360,7 +352,8 @@
       <workItem from="1558890876472" duration="2122000" />
       <workItem from="1558904203039" duration="470000" />
       <workItem from="1558944386481" duration="4807000" />
-      <workItem from="1559051153449" duration="385000" />
+      <workItem from="1559051153449" duration="1496000" />
+      <workItem from="1559070572975" duration="909000" />
     </task>
     <task id="LOCAL-00001" summary="Dragon">
       <created>1557700237024</created>
@@ -401,13 +394,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57233000" />
+    <option name="totallyTimeSpent" value="59253000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20196672" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20499243" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -520,20 +513,13 @@
     <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa13156.25425/CreateGifExample.java" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa13156.41033/GifSequenceWriter.java" />
     <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa13156.40379/CreateGifExample.java" />
-    <entry file="file://$PROJECT_DIR$/src/menu/SimulationWindow.java">
+    <entry file="file://$PROJECT_DIR$/src/pictures/Picture.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="63" column="71" selection-start-line="63" selection-start-column="71" selection-end-line="63" selection-end-column="71" />
+        <state relative-caret-position="1275">
+          <caret line="87" column="36" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/menu/Simulation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -570,20 +556,24 @@
     <entry file="file://$PROJECT_DIR$/src/images/dragon.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/menu/Menu.java">
+    <entry file="file://$PROJECT_DIR$/src/menu/Simulation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="133" column="21" lean-forward="true" selection-start-line="133" selection-start-column="21" selection-end-line="133" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="289">
+          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pictures/Picture.java">
+    <entry file="file://$PROJECT_DIR$/src/menu/SimulationWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="75" column="71" selection-start-line="75" selection-start-column="71" selection-end-line="75" selection-end-column="71" />
+        <state relative-caret-position="-433">
+          <caret line="66" selection-start-line="66" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/menu/Menu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="192" column="8" selection-start-line="192" selection-start-column="8" selection-end-line="192" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

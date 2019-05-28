@@ -1,5 +1,7 @@
 package menu;
 
+import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Vector;
@@ -12,6 +14,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -25,25 +29,23 @@ public class Menu extends Application {
     ComboBox pmType, duration, traffic;
     Simulation simulation;
     CheckBox rain;
-    
     ApiData a = new ApiData();
     @Override
     public void start(Stage stage) throws Exception{
-       
         a.connect();
-        simulation = new Simulation();
+        simulation = new Simulation(a);
         a.getData(simulation); //wpisanie danych do symulacji
-        
+
         Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
         setData();
     }
-private void setData(){
+    private void setData(){
         wind.setText(simulation.wind);
         temperature.setText(""+simulation.getTemperature());
-        precipitation.setText(""+simulation.getPrecipitation());
+        precipitation.setText(""+simulation.getPrecipitation2());
     }
 
     private GridPane getMenu() throws FileNotFoundException{
@@ -72,7 +74,7 @@ private void setData(){
         ObservableList<String> tr = FXCollections.observableArrayList (
                 "low", "medium", "high");
         traffic = new ComboBox(tr);
-        traffic.setValue("medium");
+        traffic.setValue("low");
         traffic.setMinWidth(150);
 
         ObservableList<String> dr = FXCollections.observableArrayList (
@@ -100,8 +102,9 @@ private void setData(){
         return gridPane;
     }
     private ImageView dragon() throws FileNotFoundException{
-        
+
         FileInputStream input = new FileInputStream("src/images/dragon.gif");
+
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(200);
@@ -114,10 +117,16 @@ private void setData(){
             try {
                 processData();
 
-                
+
                 for(int i =0;i<3;i++){
                     System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
                 }
+                simulation.initializePrecipitation();
+//                System.out.println("Api");
+//                for(int i =0;i<3;i++){
+//                    System.out.println(a.getMeasurements(simulation)[i]);
+//                }
+//                System.out.println();
 
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
@@ -138,14 +147,14 @@ private void setData(){
         simulation.wind = wind.getText();
         simulation.duration = getDuration();
         simulation.pmType = pmType.getValue().toString();
-        simulation.precipitation = Integer.parseInt(precipitation.getText());
+        simulation.precipitation = Double.parseDouble(precipitation.getText());
         simulation.temperature = Integer.parseInt(temperature.getText());
         simulation.traffic = getTraffic();
         simulation.raining=rain.isSelected();
     }
-    
+
     private int getDuration(){
-         if(!duration.getValue().toString().isEmpty()) {
+        if(!duration.getValue().toString().isEmpty()) {
             String dur = duration.getValue().toString();
             switch (dur) {
                 case "1h":
@@ -160,8 +169,8 @@ private void setData(){
                     return 24;
                 case "48h":
                     return 48;
-                }
             }
+        }
         return 0;
     }
 
@@ -179,32 +188,9 @@ private void setData(){
         }
         return AvaliableTraffic.LOW;
     }
+
     public static void main(String[] args) {
-        Simulation sim = new Simulation();
-        double weights[] = new double[70];
-        for(int i = 0; i<70;i++){
-            weights[i] = i+1;
-        }
-        double[][] dataMatrix1 = sim.kriging(weights);
-        for(int i = 0; i<70;i++){
-            weights[i] = i+2;
-        }
-        double[][] dataMatrix2 = sim.kriging(weights);
-        for(int i = 0; i<70;i++){
-            weights[i] = i+3;
-        }
-        double[][] dataMatrix3 = sim.kriging(weights);
-        for(int i = 0; i<70;i++){
-            weights[i] = i+4;
-        }
-        double[][] dataMatrix4 = sim.kriging(weights);
-        Vector vector = new Vector();
-        vector.add(dataMatrix1);
-        vector.add(dataMatrix2);
-        vector.add(dataMatrix3);
-        vector.add(dataMatrix4);
-        Animation animation = new Animation();
-        animation.animate(vector,"PM10");
+        
         launch(args);
     }
 }
