@@ -122,6 +122,8 @@ public class Menu extends Application {
                     System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
                 }
                 simulation.initializePrecipitation();
+                simulation.initializeSimulation();
+
 //                System.out.println("Api");
 //                for(int i =0;i<3;i++){
 //                    System.out.println(a.getMeasurements(simulation)[i]);
