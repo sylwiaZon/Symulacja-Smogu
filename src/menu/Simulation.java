@@ -2,10 +2,7 @@ package menu;
 import java.lang.String;
 import smile.interpolation.KrigingInterpolation;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.*;
 import java.util.stream.Stream;
 
 enum AvaliableTraffic {
@@ -16,16 +13,17 @@ public class Simulation{
     int temperature;
     String wind ; //w m/s
     String windDirection;
+    float windSpeed;
     double precipitation25;
     double precipitation10;
     double precipitation;
-    double [] precipitationFromSensors= new double[3] ;
+    double [] precipitationFromSensors= new double[9] ;
     String pmType ;
     int duration ;
     boolean raining;
     AvaliableTraffic traffic;
-    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
-   // [5][] - N  [6][] - S [7][] - W [8][] - E
+    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200},{400,100},{143,60},{0,320},{595,320},{300,0},{282,595}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
+    // [5][] - N  [6][] - S [7][] - W [8][] - E
     int matrixSize = 596;
     int cuurentHour;
     Vector<double[][]> finalDataforSimulation;
@@ -92,18 +90,36 @@ public class Simulation{
     }
 
     void initializePrecipitation(){
+        double[] precipitationFromApi;
         boolean changed = this.wasPrecipitationChangedByUser();
         if(changed){
-            this.precipitationFromSensors[0]=this.precipitation;
-            this.precipitationFromSensors[1]=this.precipitation - 5;
-            this.precipitationFromSensors[2]=this.precipitation + 5;
-        
+            this.precipitationFromSensors[0] = this.precipitation;
+            this.precipitationFromSensors[1] = this.precipitation - 2;
+            this.precipitationFromSensors[2] = this.precipitation - 3;
+            this.precipitationFromSensors[3] = this.precipitation + 5;
+            this.precipitationFromSensors[4] = this.precipitation + 5;
+            this.precipitationFromSensors[5] = this.precipitation + 3;
+            this.precipitationFromSensors[6] = this.precipitation + 3;
+            this.precipitationFromSensors[7]=  this.precipitation + 3;
+            this.precipitationFromSensors[8]=this.precipitation - 3;
         }
-        else precipitationFromSensors = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
-        
+        else {
+            precipitationFromApi = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
+            this.precipitationFromSensors[0] = this.precipitation;
+            this.precipitationFromSensors[1] = precipitationFromApi[0];
+            this.precipitationFromSensors[2] = precipitationFromApi[1];
+            this.precipitationFromSensors[3] = precipitationFromApi[2];
+            this.precipitationFromSensors[4] = precipitationFromApi[2];
+            this.precipitationFromSensors[5] = this.mean(this.precipitationFromSensors[4], precipitationFromApi[1]);
+            this.precipitationFromSensors[6] = this.mean(this.precipitationFromSensors[3], precipitationFromApi[1]);
+            this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[4], precipitationFromApi[1]);
+            this.precipitationFromSensors[8] = this.precipitation + 2;
+        }
+
         if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=5;
         else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=10;
 
+        for(double x : precipitationFromSensors) System.out.println(x +" ");
     }
 
     double[][] kriging(double[] weights,double[][] sensorsCoordinates) {
@@ -124,25 +140,50 @@ public class Simulation{
         return interpolatedMatrix;
     }
 
+    double mean(double firstValue, double secondValue){
+        return (firstValue + secondValue) / 2;
+    }
+
     private double[][] propagate(){
         double mulCoefficient = 1;
         double alejeMulCoefficient = 1;
         double[][] propagatedDataMatrix ;
-
         if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.2;
-        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.3;
-        else if (this.temperature < -5) mulCoefficient *= 1.4;
+        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.25;
+        else if (this.temperature < -5) mulCoefficient *= 1.3;
 
         if (this.raining){
             mulCoefficient *= 0.8;
-            alejeMulCoefficient *= 0.9;
         }
         if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.1;
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
-        else alejeMulCoefficient *= 0.95;
+        else alejeMulCoefficient *= 1;
 
-        for(int i = 0; i < this.precipitationFromSensors.length - 1; i++) this.precipitationFromSensors[i] *= mulCoefficient;
-        this.precipitationFromSensors[2] *= alejeMulCoefficient;
+        if(this.windSpeed > 15) mulCoefficient *= 0.5;
+        else {
+            switch (windDirection) {
+                case ("N"):
+                    this.precipitationFromSensors[5] = this.mean(this.precipitationFromSensors[5],this.precipitationFromSensors[4]);
+                    break;
+                case ("S"):
+                    this.precipitationFromSensors[6] = this.mean(this.precipitationFromSensors[6],this.precipitationFromSensors[4]);
+                    break;
+                case ("W"):
+                    this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[7],this.precipitationFromSensors[4]);
+                    break;
+                case ("E"):
+                    this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[0] = this.mean(this.precipitationFromSensors[0],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[1] = this.mean(this.precipitationFromSensors[1],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[2] = this.mean(this.precipitationFromSensors[2],this.precipitationFromSensors[4]);
+                    break;
+            }
+        }
+
+
+        for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= mulCoefficient;
+        this.precipitationFromSensors[3] *= alejeMulCoefficient;
+        this.precipitationFromSensors[4] *= alejeMulCoefficient;
         propagatedDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
         return propagatedDataMatrix;
     }
@@ -157,6 +198,11 @@ public class Simulation{
     void increaseTime(){
         if(this.cuurentHour == 23) this.cuurentHour = 0;
         else this.cuurentHour++;
+    }
+    void setWindSpeedAndDirection(){
+        String windSpeedString = wind.substring(0, wind.length() - 1);
+        this.windSpeed = Float.parseFloat(windSpeedString);
+        this.windDirection = wind.substring(wind.length() - 1);
     }
 
     void changeTemperature(){
@@ -173,6 +219,7 @@ public class Simulation{
     void initializeSimulation() {
         Vector<double[][]> finalData = new Vector<>();
         this.setCurrentHour();
+        this.setWindSpeedAndDirection();
         double[][] tempDataMatrix = this.kriging(precipitationFromSensors, sensorsCoordinates);
         finalData.add(tempDataMatrix);
         for (int hourOfSimulation = 1; hourOfSimulation < duration; hourOfSimulation++) {
