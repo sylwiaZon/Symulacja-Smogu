@@ -22,7 +22,7 @@ public class Simulation{
     int duration ;
     boolean raining;
     AvaliableTraffic traffic;
-    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200},{400,100},{143,60},{0,320},{595,320},{300,0},{282,595}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
+    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200},{400,100},{143,60},{0,200},{595,320},{300,0},{282,500}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
     // [5][] - N  [6][] - S [7][] - W [8][] - E
     int matrixSize = 596;
     int cuurentHour;
@@ -116,10 +116,8 @@ public class Simulation{
             this.precipitationFromSensors[8] = this.precipitation + 2;
         }
 
-        if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=5;
-        else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=10;
-
-        for(double x : precipitationFromSensors) System.out.println(x +" ");
+        if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=10;
+        else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=15;
     }
 
     double[][] kriging(double[] weights,double[][] sensorsCoordinates) {
@@ -148,9 +146,9 @@ public class Simulation{
         double mulCoefficient = 1;
         double alejeMulCoefficient = 1;
         double[][] propagatedDataMatrix ;
-        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.2;
-        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.25;
-        else if (this.temperature < -5) mulCoefficient *= 1.3;
+        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.05;
+        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.1;
+        else if (this.temperature < -5) mulCoefficient *= 1.2;
 
         if (this.raining){
             mulCoefficient *= 0.8;
@@ -173,9 +171,6 @@ public class Simulation{
                     break;
                 case ("E"):
                     this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
-                    this.precipitationFromSensors[0] = this.mean(this.precipitationFromSensors[0],this.precipitationFromSensors[4]);
-                    this.precipitationFromSensors[1] = this.mean(this.precipitationFromSensors[1],this.precipitationFromSensors[4]);
-                    this.precipitationFromSensors[2] = this.mean(this.precipitationFromSensors[2],this.precipitationFromSensors[4]);
                     break;
             }
         }
@@ -184,6 +179,7 @@ public class Simulation{
         for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= mulCoefficient;
         this.precipitationFromSensors[3] *= alejeMulCoefficient;
         this.precipitationFromSensors[4] *= alejeMulCoefficient;
+
         propagatedDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
         return propagatedDataMatrix;
     }
@@ -227,6 +223,12 @@ public class Simulation{
             this.changeTemperature();
             tempDataMatrix = this.propagate();
             finalData.add(tempDataMatrix);
+//            for (int i = 0; i < matrixSize; i++) {
+//                for (int j = 0; j < matrixSize; j++) {
+//                    System.out.print(tempDataMatrix[i][j] + " ");
+//                }
+//                System.out.println();
+//            }
         }
         this.finalDataforSimulation = finalData;
     }
