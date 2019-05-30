@@ -54,6 +54,7 @@ public class SimulationWindow {
         window.add(dragon(),0,1);
         window.add(menu,1,1);
         window.add(simulations(),1,0);
+        window.add(scale(),2,0);
         window.setPadding(new Insets(50, 50, 50, 50));
         window.setVgap(10);
         window.setHgap(10);
@@ -61,14 +62,22 @@ public class SimulationWindow {
 
         return window;
     }
-     private ImageView simulations() throws FileNotFoundException{ //tymczasowo dopoki nie dopiszemy kodu
+     private ImageView simulations() throws FileNotFoundException{
         FileInputStream input = new FileInputStream("src/images/sym.gif");
-        //double[][] temp = simulation.kriging(simulation.tempPM10);
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(400);
         imageView.setFitWidth(400);
         return imageView;
+    }
+
+    private ImageView scale() throws FileNotFoundException{
+        FileInputStream scale = new FileInputStream("src/images/scale.jpg");
+        Image image = new Image(scale);
+        ImageView scaleImage = new ImageView(image);
+        scaleImage.setFitHeight(400);
+        scaleImage.setFitWidth(25);
+        return scaleImage;
     }
     
     private ImageView home() throws FileNotFoundException{

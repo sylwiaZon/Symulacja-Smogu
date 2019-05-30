@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="json-20180813">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/json-20180813.jar!/" />
+      <root url="jar://$PROJECT_DIR$/slf4j-api-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/slf4j-simple-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/smile-interpolation-1.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/smile-math-1.5.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

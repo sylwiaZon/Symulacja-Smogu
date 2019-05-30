@@ -30,7 +30,7 @@ public class GifSequenceWriter {
         writer.setOutput(out);
         writer.prepareWriteSequence(null);
     }
-
+    //Configuring metadata of the gif file
     private void configureRootMetadata(int delay, boolean loop) throws IIOInvalidTreeException {
         String metaFormatName = metadata.getNativeMetadataFormatName();
         IIOMetadataNode root = (IIOMetadataNode) metadata.getAsTree(metaFormatName);

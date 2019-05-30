@@ -44,6 +44,8 @@ public class Simulation{
         return wind;
     }
 
+    String getPMType() {return pmType;}
+
     double getPrecipitation2() {
         if (this.pmType.equals("PM10")) {
             this.precipitation =this.precipitation10;

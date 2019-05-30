@@ -95,7 +95,7 @@ public class ApiData {
             //System.out.println(response2.toString());
             JSONObject jsonObj2 = new JSONObject(response2.toString());
             // System.out.println("wind: "+jsonObj2.getJSONObject("wind").get("speed")+"m/s, deg:"+jsonObj2.getJSONObject("wind").get("deg"));
-            int dir = (int) jsonObj2.getJSONObject("wind").get("deg");
+            int dir = 10;//(int) jsonObj2.getJSONObject("wind").get("deg");
             if((dir<=56.25 && dir>=0)|| (dir>303.75 && dir<=360) )this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"N";
             if((dir>56.25 && dir<=123.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"E";
             if((dir>123.75 && dir<=236.25))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";

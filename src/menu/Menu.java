@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import pictures.Animation;
+import pictures.ColorsScale;
 import pictures.Picture;
 
 public class Menu extends Application {
@@ -129,6 +131,8 @@ public class Menu extends Application {
 //                    System.out.println(a.getMeasurements(simulation)[i]);
 //                }
 //                System.out.println();
+                Animation animation = new Animation();
+                animation.animate(simulation.getFinalDataforSimulation(),simulation.getPMType());
 
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");

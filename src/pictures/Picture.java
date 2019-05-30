@@ -1,18 +1,10 @@
 package pictures;
 
-import javafx.scene.image.Image;
 import javafx.util.Pair;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.*;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.Predicate;
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 
 public class Picture {
@@ -29,6 +21,7 @@ public class Picture {
             values = pair;
         }
     }
+
     public Picture (double [][]_matrix, String choice){
         matrix = _matrix;
         size = matrix.length;
@@ -40,7 +33,8 @@ public class Picture {
         }
     }
 
-
+    //Filling two structures holding values combined with its colors
+    //The maps are different due to dwo different types of precipitation
     private MapColor[] fillMap10(){
         MapColor[] PM10 = new MapColor[6];
         PM10[0] = new MapColor(new Pair<>(0.0,20.0),new Color(0,165,0));
@@ -62,8 +56,11 @@ public class Picture {
         PM25[5] = new MapColor(new Pair<>(120.0,100000.0),new Color(165,0,0));
         return PM25;
     }
-
+    //Getting color from map
     private Color getColor(double value){
+        if(value < mapColors[0].values.getKey()){
+            return mapColors[0].color;
+        }
         for(int i = 0; i < 6; i++){
             if(value >= mapColors[i].values.getKey() && value < mapColors[i].values.getValue()){
                 return mapColors[i].color;
@@ -71,7 +68,7 @@ public class Picture {
         }
         return null;
     }
-
+    //Creating image consisting of colors meant to be on top of the map
     public void createSmogImage() throws IOException {
         BufferedImage fgImage = ImageIO.read( new File( "src/images/map.jpg" ) );
         int width = fgImage.getWidth();
@@ -82,6 +79,7 @@ public class Picture {
 
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
+                //get color corresponding to the level of precipitation at defined place
                 color = getColor(matrix[x][y]);
                 r = color.getRed();
                 g = color.getGreen();
@@ -93,7 +91,7 @@ public class Picture {
         ImageIO.write(img, "jpg", new File("src/images/colors.jpg"));
 
     }
-
+    //Combining together image of map and the colors corresponding to smog levels
     public void createPicture (File file){
         try {
             createSmogImage();

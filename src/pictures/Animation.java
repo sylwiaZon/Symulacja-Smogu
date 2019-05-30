@@ -14,6 +14,7 @@ public class Animation {
             writer = new GifSequenceWriter();
 
             for (int i = 0; i < num; i++) {
+                //Creating steps of simulation and combining them together into gif file
                 File file = new File ("src/images/animation" + i + ".jpg");
                 Picture picture = new Picture(matrixes.get(i),choice);
                 picture.createPicture(file);
