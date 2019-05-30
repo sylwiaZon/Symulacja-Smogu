@@ -151,13 +151,14 @@ public class Simulation{
         if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.05;
         else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.1;
         else if (this.temperature < -5) mulCoefficient *= 1.15;
+        else mulCoefficient *= 0.95;
 
         if (this.raining){
             mulCoefficient *= 0.8;
         }
         if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.1;
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
-        else alejeMulCoefficient *= 0.95;
+        else alejeMulCoefficient *= 1;
 
         if(this.windSpeed > 15) mulCoefficient *= 0.5;
         else {
