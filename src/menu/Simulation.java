@@ -17,12 +17,12 @@ public class Simulation{
     double precipitation25;
     double precipitation10;
     double precipitation;
-    double [] precipitationFromSensors= new double[9] ;
+    double [] precipitationFromSensors= new double[10] ;
     String pmType ;
     int duration ;
     boolean raining;
     AvaliableTraffic traffic;
-    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200},{400,100},{143,60},{0,200},{595,320},{300,0},{282,500}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
+    double[][] sensorsCoordinates = {{268,488},{50,160},{226,200},{400,100},{143,60},{0,200},{595,320},{300,0},{282,500},{300,50}}; //{{row,col}} // sensorscoordinates[3/4][] - aleje
     // [5][] - N  [6][] - S [7][] - W [8][] - E
     int matrixSize = 596;
     int cuurentHour;
@@ -104,6 +104,8 @@ public class Simulation{
             this.precipitationFromSensors[6] = this.precipitation + 3;
             this.precipitationFromSensors[7]=  this.precipitation + 3;
             this.precipitationFromSensors[8]=this.precipitation - 3;
+            this.precipitationFromSensors[9]=this.precipitation + 5;
+
         }
         else {
             precipitationFromApi = Stream.of(data.getMeasurements(this)).mapToDouble(Double::doubleValue).toArray();
@@ -116,10 +118,19 @@ public class Simulation{
             this.precipitationFromSensors[6] = this.mean(this.precipitationFromSensors[3], precipitationFromApi[1]);
             this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[4], precipitationFromApi[1]);
             this.precipitationFromSensors[8] = this.precipitation + 2;
+            this.precipitationFromSensors[9] = precipitationFromApi[2];
         }
 
-        if(traffic == AvaliableTraffic.MEDIUM) this.precipitationFromSensors[2] +=10;
-        else if(traffic == AvaliableTraffic.HIGH) this.precipitationFromSensors[2] +=15;
+        if(traffic == AvaliableTraffic.MEDIUM){
+            this.precipitationFromSensors[3] +=10;
+            this.precipitationFromSensors[4] +=10;
+            this.precipitationFromSensors[9] +=10;
+        }
+        else if(traffic == AvaliableTraffic.HIGH){
+            this.precipitationFromSensors[3] +=15;
+            this.precipitationFromSensors[4] +=15;
+            this.precipitationFromSensors[9] +=15;
+        }
     }
 
     double[][] kriging(double[] weights,double[][] sensorsCoordinates) {
@@ -151,11 +162,10 @@ public class Simulation{
         if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.05;
         else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.1;
         else if (this.temperature < -5) mulCoefficient *= 1.15;
-        else mulCoefficient *= 0.95;
+        else mulCoefficient *= 1;
 
-        if (this.raining){
-            mulCoefficient *= 0.8;
-        }
+        if (this.raining) mulCoefficient *= 0.8;
+
         if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.1;
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
         else alejeMulCoefficient *= 1;
@@ -177,11 +187,10 @@ public class Simulation{
                     break;
             }
         }
-
-
         for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= mulCoefficient;
         this.precipitationFromSensors[3] *= alejeMulCoefficient;
         this.precipitationFromSensors[4] *= alejeMulCoefficient;
+        this.precipitationFromSensors[9] *= alejeMulCoefficient;
 
         propagatedDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
         return propagatedDataMatrix;
@@ -226,12 +235,6 @@ public class Simulation{
             this.changeTemperature();
             tempDataMatrix = this.propagate();
             finalData.add(tempDataMatrix);
-//            for (int i = 0; i < matrixSize; i++) {
-//                for (int j = 0; j < matrixSize; j++) {
-//                    System.out.print(tempDataMatrix[i][j] + " ");
-//                }
-//                System.out.println();
-//            }
         }
         this.finalDataforSimulation = finalData;
     }
