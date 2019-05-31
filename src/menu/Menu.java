@@ -30,19 +30,21 @@ public class Menu extends Application {
     private TextField temperature, wind, precipitation;
     ComboBox pmType, duration, traffic;
     Simulation simulation;
+    Simulation daneW;
     CheckBox rain;
     ApiData a = new ApiData();
     @Override
     public void start(Stage stage) throws Exception{
         a.connect();
         simulation = new Simulation(a);
-        a.getData(simulation); //wpisanie danych do symulacji
+        daneW = new Simulation(a);
+       // a.getData(simulation); //wpisanie danych do symulacji
 
         Scene scene = new Scene(getMenu(),600,550);
         stage.setTitle("Smog Simulation");
         stage.setScene(scene);
         stage.show();
-        setData();
+        //setData();
     }
     private void setData(){
         wind.setText(simulation.wind);
@@ -95,6 +97,7 @@ public class Menu extends Application {
         rain = new CheckBox();
         gridPane.add(rain,1,6);
         gridPane.add(simulate(),2,6);
+        gridPane.add(getDatas(),0,7);
         gridPane.add(dragon(),2,8);
         gridPane.setPadding(new Insets(50, 50, 50, 50));
         gridPane.setVgap(10);
@@ -113,16 +116,24 @@ public class Menu extends Application {
         imageView.setFitWidth(200);
         return imageView;
     }
+    private Button getDatas(){
+        Button connect = new Button("Get Datas from Api");
+        connect.setOnAction(value->{
+             a.getData(simulation);
+             setData();
+        });
+        return connect;
+    }
     private Button simulate(){
         Button apply = new Button("Simulate!");
         apply.setOnAction(value -> {
             try {
                 processData();
-
-
-                for(int i =0;i<3;i++){
-                    System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
-                }
+               
+               
+                //for(int i =0;i<3;i++){
+                 //   System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
+                //}
                 simulation.initializePrecipitation();
                 simulation.initializeSimulation();
 
@@ -137,7 +148,7 @@ public class Menu extends Application {
                 Stage stage2 = (Stage) apply.getScene().getWindow();
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();
-                window.setSimulation(simulation);
+                window.setSimulation(daneW);
                 Scene scene= new Scene(window.getWindow(),700,700); // zmienic
                 stage2.setScene(scene);
                 stage2.show();
@@ -157,6 +168,13 @@ public class Menu extends Application {
         simulation.temperature = Integer.parseInt(temperature.getText());
         simulation.traffic = getTraffic();
         simulation.raining=rain.isSelected();
+        daneW.wind = wind.getText();
+        daneW.duration = getDuration();
+        daneW.pmType = pmType.getValue().toString();
+        daneW.precipitation = Double.parseDouble(precipitation.getText());
+        daneW.temperature = Integer.parseInt(temperature.getText());
+        daneW.traffic = getTraffic();
+        daneW.raining=rain.isSelected();
     }
 
     private int getDuration(){

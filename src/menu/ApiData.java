@@ -27,9 +27,9 @@ public class ApiData {
     double precipitationPM25;
     double precipitationPM10;
 
-    void connect(){
+    void connect() throws MalformedURLException, IOException{
         /* ----------------- Airly ---------------*/
-        try {
+        
             String stringUrl = "https://airapi.airly.eu/v2/measurements/installation?indexType=AIRLY_CAQI&installationId=8077";
             URL url = new URL(stringUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -71,12 +71,10 @@ public class ApiData {
 
             }
             connection.disconnect();
-        } catch (IOException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
 
         /* ----------------- Weather Open Map ---------------*/
-        try{
+       
             String stringUrl2 ="http://api.openweathermap.org/data/2.5/weather?q=Krakow,PL&APPID=8c53f908060ea53a90a656761306d06c";
             URL url2 = new URL(stringUrl2);
             HttpURLConnection connection2 = (HttpURLConnection) url2.openConnection();
@@ -95,15 +93,16 @@ public class ApiData {
             //System.out.println(response2.toString());
             JSONObject jsonObj2 = new JSONObject(response2.toString());
             // System.out.println("wind: "+jsonObj2.getJSONObject("wind").get("speed")+"m/s, deg:"+jsonObj2.getJSONObject("wind").get("deg"));
-            int dir = 10;//(int) jsonObj2.getJSONObject("wind").get("deg");
+            int dir=300;
+            if(jsonObj2.getJSONObject("wind").has("deg")){
+                dir=(int) jsonObj2.getJSONObject("wind").get("deg");
+            }
             if((dir<=56.25 && dir>=0)|| (dir>303.75 && dir<=360) )this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"N";
             if((dir>56.25 && dir<=123.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"E";
             if((dir>123.75 && dir<=236.25))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
-            if((dir>236.25 && dir<=303.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"S";
+            if((dir>236.25 && dir<=303.75))this.wind =  jsonObj2.getJSONObject("wind").get("speed")+"W";
             connection2.disconnect();
-        }catch (IOException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
     void getData(Simulation simulation){
         simulation.temperature = this.temperature;
