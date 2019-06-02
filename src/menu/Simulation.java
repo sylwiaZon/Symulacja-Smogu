@@ -164,7 +164,7 @@ public class Simulation{
         if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.1;
         else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.2;
         else if (this.temperature < -5) mulCoefficient *= 1.25;
-        else mulCoefficient *= 1;
+        else mulCoefficient *= 0.95;
 
         if (this.raining) mulCoefficient *= 0.8;
 
@@ -182,10 +182,10 @@ public class Simulation{
                     this.precipitationFromSensors[6] = this.mean(this.precipitationFromSensors[6],this.precipitationFromSensors[4]);
                     break;
                 case ("W"):
-                    this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[7],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[7],this.precipitationFromSensors[4]);
                     break;
                 case ("E"):
-                    this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
                     break;
             }
         }
