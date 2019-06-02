@@ -157,16 +157,13 @@ public class Simulation{
         return (firstValue + secondValue) / 2;
     }
 
-    private double[][] propagate(boolean everyHour){
+    private double[][] propagateEveryHour(){
         double mulCoefficient = 1;
         double alejeMulCoefficient = 1;
-        double changeIntoMinutes ;
-        if(everyHour) changeIntoMinutes = 1;
-        else changeIntoMinutes = 0.83333;
         double[][] propagatedDataMatrix ;
         if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.1;
         else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.2;
-        else if (this.temperature < -5) mulCoefficient *= 1.4;
+        else if (this.temperature < -5) mulCoefficient *= 1.25;
         else mulCoefficient *= 1;
 
         if (this.raining) mulCoefficient *= 0.8;
@@ -175,7 +172,7 @@ public class Simulation{
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
         else alejeMulCoefficient *= 1;
 
-        if(this.windSpeed > 15) mulCoefficient *= 0.5;
+        if(this.windSpeed > 10) mulCoefficient *= 0.5;
         else {
             switch (windDirection) {
                 case ("N"):
@@ -192,7 +189,7 @@ public class Simulation{
                     break;
             }
         }
-        for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= (mulCoefficient*changeIntoMinutes);
+        for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= mulCoefficient;
         this.precipitationFromSensors[3] *= alejeMulCoefficient;
         this.precipitationFromSensors[4] *= alejeMulCoefficient;
         this.precipitationFromSensors[9] *= alejeMulCoefficient;
@@ -200,6 +197,7 @@ public class Simulation{
         propagatedDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
         return propagatedDataMatrix;
     }
+
 
     void setCurrentHour(){
         Date date = new Date();
@@ -232,21 +230,35 @@ public class Simulation{
     void initializeSimulation() {
         Vector<double[][]> finalData = new Vector<>();
         this.setCurrentHour();
-        boolean intoMinutes = false;
         this.setWindSpeedAndDirection();
-        if(this.duration == 1){
-            this.duration = 7;
-            intoMinutes = true;
-        }
         double[][] tempDataMatrix = this.kriging(this.precipitationFromSensors,this. sensorsCoordinates);
         finalData.add(tempDataMatrix);
-        for (int hourOfSimulation = 1; hourOfSimulation < this.duration + 1; hourOfSimulation++) {
-            if(!intoMinutes) {
+        if(this.duration == 1){
+            double[][] propagatedDataMatrix;
+            double [] startPrecipitation = this.precipitationFromSensors.clone();
+
+            this.increaseTime();
+            this.changeTemperature();
+            propagatedDataMatrix = this.propagateEveryHour();
+
+            double [] endPrecipitation = precipitationFromSensors.clone();
+            double [] arrayOfDifference = new double[this.precipitationFromSensors.length];
+            for(int i = 0; i < this.precipitationFromSensors.length; i++) arrayOfDifference[i] = (endPrecipitation[i] - startPrecipitation[i])/6;
+            this.precipitationFromSensors = startPrecipitation.clone();
+
+            for (int minuteOfSimulation = 0; minuteOfSimulation <60; minuteOfSimulation += 10) {
+                for(int j = 0; j < this.precipitationFromSensors.length; j++) this.precipitationFromSensors[j] += arrayOfDifference[j];
+                tempDataMatrix = this.kriging(this.precipitationFromSensors,this.sensorsCoordinates);
+                finalData.add(tempDataMatrix);
+            }
+        }
+        else{
+            for (int hourOfSimulation = 1; hourOfSimulation < this.duration + 1; hourOfSimulation++) {
                 this.increaseTime();
                 this.changeTemperature();
+                tempDataMatrix = this.propagateEveryHour();
+                finalData.add(tempDataMatrix);
             }
-            tempDataMatrix = this.propagate(intoMinutes);
-            finalData.add(tempDataMatrix);
         }
         this.finalDataforSimulation = finalData;
     }
