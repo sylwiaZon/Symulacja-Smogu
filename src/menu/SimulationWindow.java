@@ -26,9 +26,11 @@ public class SimulationWindow {
     GridPane window;
     Simulation simulation;
     int play = 0;
+    ImageView simulationGif;
     void setSimulation(Simulation sym){
-        simulation = sym; 
+        simulation = sym;
     }
+
     GridPane getWindow() throws FileNotFoundException{
          window = new GridPane();
          GridPane pane = new GridPane();
@@ -53,7 +55,8 @@ public class SimulationWindow {
         window.add(pane, 0,0);
         window.add(dragon(),0,1);
         window.add(menu,1,1);
-        window.add(simulations(),1,0);
+        simulationGif = simulations();
+        window.add(simulationGif,1,0);
         window.add(scale(),2,0);
         window.setPadding(new Insets(50, 50, 50, 50));
         window.setVgap(10);
@@ -101,15 +104,19 @@ public class SimulationWindow {
     }
     private ImageView play() throws FileNotFoundException{
         FileInputStream play = new FileInputStream("src/images/play.png");
-        FileInputStream stop = new FileInputStream("src/images/stop.png");
         Image image1 = new Image(play);
-        Image image2 = new Image(stop);
         ImageView imageView = new ImageView(image1);
         
         imageView.setFitHeight(40);
         imageView.setFitWidth(40);
         imageView.setOnMousePressed(value->{
-          //tutaj zamiana obrazkow play/stop
+            try {
+                FileInputStream input = new FileInputStream("src/images/sym.gif");
+                Image image = new Image(input);
+                simulationGif.setImage(image);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
         return imageView;
     }

@@ -117,7 +117,7 @@ public class Menu extends Application {
         return imageView;
     }
     private Button getDatas(){
-        Button connect = new Button("Get Datas from Api");
+        Button connect = new Button("Get Data from Api");
         connect.setOnAction(value->{
              a.getData(simulation);
              setData();
@@ -129,19 +129,10 @@ public class Menu extends Application {
         apply.setOnAction(value -> {
             try {
                 processData();
-               
-               
-                //for(int i =0;i<3;i++){
-                 //   System.out.println(a.getMeasurements(simulation)[i]);  //pobranie kolejnych 3 punktow, zwracane jako tablica
-                //}
+
                 simulation.initializePrecipitation();
                 simulation.initializeSimulation();
 
-//                System.out.println("Api");
-//                for(int i =0;i<3;i++){
-//                    System.out.println(a.getMeasurements(simulation)[i]);
-//                }
-//                System.out.println();
                 Animation animation = new Animation();
                 animation.animate(simulation.getFinalDataforSimulation(),simulation.getPMType());
 
@@ -149,7 +140,7 @@ public class Menu extends Application {
                 stage2.setTitle("Smog Simulation");
                 SimulationWindow window = new SimulationWindow();
                 window.setSimulation(daneW);
-                Scene scene= new Scene(window.getWindow(),700,700); // zmienic
+                Scene scene= new Scene(window.getWindow(),700,700);
                 stage2.setScene(scene);
                 stage2.show();
             } catch (FileNotFoundException ex) {

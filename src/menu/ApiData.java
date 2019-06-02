@@ -47,16 +47,13 @@ public class ApiData {
                     response.append(line);
                 }           }
 
-            // System.out.println(response.toString());
             JSONObject jsonObj = new JSONObject(response.toString());
 
-            //System.out.println(jsonObj.getJSONObject("current").get("values"));
             for(int i=0;i<6;i++){
                 JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
                 JSONObject obj =values.getJSONObject(i);
                 String name = (String) obj.get("name");
 
-                // System.out.println(name);
                 if (name.equals("PM25")){
                     precipitationPM25=obj.getInt("value");
                 }
@@ -90,9 +87,7 @@ public class ApiData {
                     response2.append(line);
                 }           }
 
-            //System.out.println(response2.toString());
             JSONObject jsonObj2 = new JSONObject(response2.toString());
-            // System.out.println("wind: "+jsonObj2.getJSONObject("wind").get("speed")+"m/s, deg:"+jsonObj2.getJSONObject("wind").get("deg"));
             int dir=300;
             if(jsonObj2.getJSONObject("wind").has("deg")){
                 dir=(int) jsonObj2.getJSONObject("wind").get("deg");
@@ -142,16 +137,13 @@ public class ApiData {
                             response.append(line);
                         }           }
 
-                    // System.out.println(response.toString());
                     JSONObject jsonObj = new JSONObject(response.toString());
 
-                    //System.out.println(jsonObj.getJSONObject("current").get("values"));
                     for(int i=0;i<6;i++){
                         JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
                         JSONObject obj =values.getJSONObject(i);
                         String name = (String) obj.get("name");
 
-                        // System.out.println(name);
 
                         if (name.equals("PM10")){
                             tab[k]=obj.getDouble("value");
@@ -183,16 +175,13 @@ public class ApiData {
                             response.append(line);
                         }           }
 
-                    // System.out.println(response.toString());
                     JSONObject jsonObj = new JSONObject(response.toString());
 
-                    //System.out.println(jsonObj.getJSONObject("current").get("values"));
                     for(int i=0;i<6;i++){
                         JSONArray values = (JSONArray) jsonObj.getJSONObject("current").get("values");
                         JSONObject obj =values.getJSONObject(i);
                         String name = (String) obj.get("name");
 
-                        // System.out.println(name);
 
                         if (name.equals("PM25")){
                             tab[k]=obj.getDouble("value");
