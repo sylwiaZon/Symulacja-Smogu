@@ -42,7 +42,9 @@ public class Simulation{
         return wind;
     }
 
-    String getPMType() {return pmType;}
+    String getPMType() {
+        return pmType;
+    }
 
     double getPrecipitation2() {
         if (this.pmType.equals("PM10")) {
@@ -155,13 +157,16 @@ public class Simulation{
         return (firstValue + secondValue) / 2;
     }
 
-    private double[][] propagate(){
+    private double[][] propagate(boolean everyHour){
         double mulCoefficient = 1;
         double alejeMulCoefficient = 1;
+        double changeIntoMinutes ;
+        if(everyHour) changeIntoMinutes = 1;
+        else changeIntoMinutes = 0.83333;
         double[][] propagatedDataMatrix ;
-        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.05;
-        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.1;
-        else if (this.temperature < -5) mulCoefficient *= 1.15;
+        if (this.temperature >= 0 && this.temperature < 10) mulCoefficient *= 1.1;
+        else if (this.temperature >= -5 && this.temperature < 0) mulCoefficient *= 1.2;
+        else if (this.temperature < -5) mulCoefficient *= 1.4;
         else mulCoefficient *= 1;
 
         if (this.raining) mulCoefficient *= 0.8;
@@ -187,7 +192,7 @@ public class Simulation{
                     break;
             }
         }
-        for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= mulCoefficient;
+        for(int i = 0; i < this.precipitationFromSensors.length; i++) this.precipitationFromSensors[i] *= (mulCoefficient*changeIntoMinutes);
         this.precipitationFromSensors[3] *= alejeMulCoefficient;
         this.precipitationFromSensors[4] *= alejeMulCoefficient;
         this.precipitationFromSensors[9] *= alejeMulCoefficient;
@@ -208,9 +213,9 @@ public class Simulation{
         else this.cuurentHour++;
     }
     void setWindSpeedAndDirection(){
-        String windSpeedString = wind.substring(0, wind.length() - 1);
+        String windSpeedString = this.wind.substring(0, this.wind.length() - 1);
         this.windSpeed = Float.parseFloat(windSpeedString);
-        this.windDirection = wind.substring(wind.length() - 1);
+        this.windDirection = this.wind.substring(this.wind.length() - 1);
     }
 
     void changeTemperature(){
@@ -227,13 +232,20 @@ public class Simulation{
     void initializeSimulation() {
         Vector<double[][]> finalData = new Vector<>();
         this.setCurrentHour();
+        boolean intoMinutes = false;
         this.setWindSpeedAndDirection();
-        double[][] tempDataMatrix = this.kriging(precipitationFromSensors, sensorsCoordinates);
+        if(this.duration == 1){
+            this.duration = 7;
+            intoMinutes = true;
+        }
+        double[][] tempDataMatrix = this.kriging(this.precipitationFromSensors,this. sensorsCoordinates);
         finalData.add(tempDataMatrix);
-        for (int hourOfSimulation = 1; hourOfSimulation < duration; hourOfSimulation++) {
-            this.increaseTime();
-            this.changeTemperature();
-            tempDataMatrix = this.propagate();
+        for (int hourOfSimulation = 1; hourOfSimulation < this.duration + 1; hourOfSimulation++) {
+            if(!intoMinutes) {
+                this.increaseTime();
+                this.changeTemperature();
+            }
+            tempDataMatrix = this.propagate(intoMinutes);
             finalData.add(tempDataMatrix);
         }
         this.finalDataforSimulation = finalData;
