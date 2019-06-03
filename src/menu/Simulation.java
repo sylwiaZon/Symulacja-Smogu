@@ -166,7 +166,7 @@ public class Simulation{
         else if (this.temperature < -5) mulCoefficient *= 1.25;
         else mulCoefficient *= 0.95;
 
-        if (this.raining) mulCoefficient *= 0.8;
+        if (this.raining) mulCoefficient *= 0.7;
 
         if((this.cuurentHour >=6 && this.cuurentHour <=9) || (this.cuurentHour >=15 && this.cuurentHour <=18)) alejeMulCoefficient *= 1.1;
         else if(this.cuurentHour >9 && this.cuurentHour <15) alejeMulCoefficient *= 1.05;
