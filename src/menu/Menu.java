@@ -117,10 +117,11 @@ public class Menu extends Application {
         return imageView;
     }
     private Button getDatas(){
-        Button connect = new Button("Get Data from Api");
+        Button connect = new Button("Get Datas from Api");
         connect.setOnAction(value->{
-             a.getData(simulation);
-             setData();
+
+            a.getData(simulation);
+            setData();
         });
         return connect;
     }
