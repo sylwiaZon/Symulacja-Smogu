@@ -182,10 +182,10 @@ public class Simulation{
                     this.precipitationFromSensors[6] = this.mean(this.precipitationFromSensors[6],this.precipitationFromSensors[4]);
                     break;
                 case ("W"):
-                    this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[7],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[7],this.precipitationFromSensors[4]);
                     break;
                 case ("E"):
-                    this.precipitationFromSensors[7] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
+                    this.precipitationFromSensors[8] = this.mean(this.precipitationFromSensors[8],this.precipitationFromSensors[4]);
                     break;
             }
         }
